@@ -127,19 +127,20 @@ $(document).on('click', '#save', function(e){
   var data = [].concat($container.data('handsontable').getData());
   console.log(JSON.stringify({header: data.shift()}));
   console.log(JSON.stringify({data: data}));
-  var url = 'http://104.236.140.70:9000/site';
+  var url = baseUrl;
   var postData = {sheetName: selectedSheet, metaData: JSON.stringify($container.data('handsontable').getData())};
-  $('#status').show();
+  toastr.info('Upload in progress...');
   $.post(url, postData, function(data, status){
     console.log("Data:" + data + "\nStatus:" + status);
-    $('#status').hide();
-    window.location.href = 'version.html?context=' + selectedSheet;
+    /*$('#status').hide();*/
+    toastr.success('Upload Successful');
   })
       .done(function(){
 
       })
           .fail(function(){
-alert("Error occurred!");
+        /*$('#status').hide();*/
+toastr.error("Error occurred!");
           })
       .always(function(){
 

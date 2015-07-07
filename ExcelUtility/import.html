@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Excel Uploader</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="icon" type="image/png" href="assets/img/logo.png" />
+        <link rel="stylesheet" href="assets/css/sheetjs.css">
+    </head>
+    <body>
+        <script src="assets/vendor/alertify.js"></script>
+        <!--<link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
+        <script src="assets/vendor/jquery.min.js"></script>
+        <script src="assets/vendor/bootstrap.min.js"></script>-->
+        <script src="assets/vendor/jquery.handsontable.full.js"></script>
+
+        <link rel="stylesheet" media="screen" href="assets/vendor/jquery.handsontable.full.css">
+        <link rel="stylesheet" media="screen" href="assets/vendor/samples.css">
+        <link rel="stylesheet" media="screen" href="assets/vendor/alertify.css">
+        <div class="container">
+
+                <div id="body">
+                    <div id="left">
+                    <div id="drop">Drop a file here</div>
+                    <div id="buttons"></div>
+                    </div>
+                </div>
+                <div id="right">
+                    <div id="header">
+                        <h2>
+                            Upload excel file
+                        </h2>
+                        <h3>
+                            (XLS/XLSX/XLSM/XLSB/XML) in the box to the left to see a preview
+                        </h3>
+                    </div>
+                    <div class="row">
+                        <h3 id="sheet"></h3>
+                    </div>
+                    <div id="hot" style="overflow: scroll" class="handsontable"></div>
+                    <div id="divSave"><input id="save" class="btn-lg btn-success pull-right" type="button" value="Save"> </div>
+                    <div id="status" class="alert">Processing data...</div>
+                </div>
+        </div>
+        <script src="assets/js/shim.js"></script>
+        <script src="assets/js/cpexcel.js"></script>
+        <script src="assets/js/xls.js"></script>
+        <script src="assets/js/jszip.js"></script>
+        <script src="assets/js/xlsx.js"></script>
+        <script src="assets/js/dropsheet.js"></script>
+        <script src="assets/js/main.js"></script>
+
+        <script src="assets/vendor/spin.js"></script>
+
+    </body>
+</html>

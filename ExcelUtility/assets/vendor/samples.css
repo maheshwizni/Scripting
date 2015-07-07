@@ -77,34 +77,6 @@ pre {
   clear: left;
 }
 
-ul,
-ol,
-p,
-.descLayout pre {
-  margin-bottom: 1.5em;
-  clear: left;
-}
-
-li {
-  margin-bottom: 1.3em;
-}
-
-ul.tight li {
-  margin-bottom: 0.3em;
-}
-
-ul {
-  padding-left: 30px;
-}
-
-ul ul {
-  margin-top: 1.5em;
-}
-
-.descLayout pre {
-  margin-left: 0.5em;
-}
-
 .warning {
   border: 1px solid #D4D8EB;
   padding: 10px;

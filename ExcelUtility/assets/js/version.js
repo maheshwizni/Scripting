@@ -38,6 +38,7 @@ function getUrlParameter(sParam)
 }
 
 $(document).ready(function() {
+    /*debugger;*/
     $container = $("#hot"); $parent = $container.parent();
     $window = $(window);
     $window.on('resize', calculateSize);
@@ -56,7 +57,7 @@ $(document).on('change', '#context', function(e){
     console.log(selectedSheet);
     loadVersions(selectedSheet);
 });
-var url = 'http://104.236.140.70:9000/site';
+var url = baseUrl;
 function loadVersions(sheetName){
     $('#hot').hide();
   $('#version option').remove();
