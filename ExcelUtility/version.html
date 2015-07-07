@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Version Administration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/png" href="assets/img/logo.png" />
+    <link rel="stylesheet" href="assets/css/sheetjs.css">
+</head>
+<body>
+<link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
+<script src="assets/vendor/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap.min.js"></script>
+<script src="assets/vendor/jquery.handsontable.full.js"></script>
+
+<link rel="stylesheet" media="screen" href="assets/vendor/jquery.handsontable.full.css">
+<link rel="stylesheet" media="screen" href="assets/vendor/samples.css">
+<link rel="stylesheet" media="screen" href="assets/vendor/alertify.css">
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            Version Administration
+        </h2>
+    </div>
+    <div class="row">
+    <a href="index.html" target="_self">Upload another excel file</a><br><br> </div>
+    <div class="row">
+        <label>Select Sheet:</label>
+        <select class="form-control" id="context">
+            <option>Site</option>
+            <option value="CyberSystem">Cyber System</option>
+            <option value="CyberAsset">Cyber Asset</option>
+        </select>
+    </div>
+<div class="row">
+<label>    Select Version:</label>
+    <select id="version" class="form-control">
+    </select>
+</div>
+<div class="row">
+    <br><br>
+    <div id="hot" style="overflow: scroll" class="handsontable"></div>
+</div>
+</div>
+<script src="assets/js/version.js"></script>
+</body>
+</html>

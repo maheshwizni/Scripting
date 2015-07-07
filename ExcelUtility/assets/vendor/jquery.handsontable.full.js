@@ -1598,15 +1598,15 @@ Handsontable.Core = function (rootElement, userSettings) {
   };
 
   function expandType(obj) {
-    if (!obj.hasOwnProperty('type')) return; //ignore obj.prototype.type
+    if (obj && !obj.hasOwnProperty('type')) return; //ignore obj.prototype.type
 
 
     var type, expandedType = {};
 
-    if (typeof obj.type === 'object') {
+    if (obj && typeof obj.type === 'object') {
       type = obj.type;
     }
-    else if (typeof obj.type === 'string') {
+    else if (obj && typeof obj.type === 'string') {
       type = Handsontable.cellTypes[obj.type];
       if (type === void 0) {
         throw new Error('You declared cell type "' + obj.type + '" as a string that is not mapped to a known object. Cell type must be an object or a string mapped to an object in Handsontable.cellTypes');
@@ -1615,7 +1615,7 @@ Handsontable.Core = function (rootElement, userSettings) {
 
 
     for (var i in type) {
-      if (type.hasOwnProperty(i) && !obj.hasOwnProperty(i)) {
+      if (type.hasOwnProperty(i) && obj && !obj.hasOwnProperty(i)) {
         expandedType[i] = type[i];
       }
     }
@@ -3809,8 +3809,10 @@ Handsontable.SelectionPoint.prototype.arr = function (arr) {
     var columns = this.instance.getSettings().columns;
     if (columns) {
       for (i = 0, ilen = columns.length; i < ilen; i++) {
-        this.colToPropCache[i] = columns[i].data;
-        this.propToColCache[columns[i].data] = i;
+        if(columns[i]) {
+          this.colToPropCache[i] = columns[i].data;
+          this.propToColCache[columns[i].data] = i;
+        }
       }
     }
     else {

@@ -43,6 +43,8 @@ $(document).ready(function() {
   $window = $(window);
   $window.on('resize', calculateSize);
   $('#divSave').hide();
+  $('#hot').hide();
+  $('#status').hide();
 });
 
 /* make the buttons for the sheets */
@@ -53,14 +55,23 @@ var make_buttons = function(sheetnames, cb) {
     var button= $('<button/>').attr({ type:'button', name:'btn' +idx, text:s });
     button.append('<h3>' + s + '</h3>');
     button.click(function() { cb(idx); });
-    $buttons.append(button);
-    $buttons.append('<br/>');
+    /*$buttons.append(button);
+    $buttons.append('<br/>');*/
   });
 };
 
+//Custom renderer add class if the element have the data "change"
+var myRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+  Handsontable.TextCell.renderer.apply(this, arguments);
+  if($(td).data("change")){
+    $(td).addClass('changeInput');
+  }
+};
+var selectedSheet;
 var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   //$('#footnote').hide();
   $('#divSave').show();
+  $('#hot').show();
   make_buttons(sheetnames, select_sheet_cb);
   calculateSize();
 
@@ -69,7 +80,8 @@ var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   json.unshift(function(head){var o = {}; for(i=0;i!=head.length;++i) o[head[i]] = head[i]; return o;}(cols));
   calculateSize();
   /* showtime! */
-
+selectedSheet = sheetnames[0];
+  $('#sheet').text(selectedSheet);
   $("#hot").handsontable({
     data: json,
     //startRows: 5,
@@ -86,13 +98,28 @@ var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
     colHeaders: false,//cols.map(function(x,i) { return XLS.utils.encode_col(i); }),
     cells: function (r,c,p) {
       if(r === 0) {this.renderer = boldRenderer; this.readOnly = true;}
+      else { this.renderer = myRenderer; }
       //this.renderer = boldRenderer;
     },
     width: function () { return availableWidth; },
-    //height: function () { return availableHeight; },
+    height: function () { return availableHeight; },
     stretchH: 'all'
   });
+
+/*  $('#hot').handsontable('getInstance').addHook('afterChange', function(changes) {
+    var ele=this;
+    $.each(changes, function (index, element) {
+      //add the changeInput class to the actual td
+      $(ele.getCell(element[0],ele.propToCol(element[1]))).addClass('changeInput')
+      //get the cell properties and create a new one "change"
+      //to check in the renderer
+      ele.getCellMeta(element[0],ele.propToCol(element[1])).change=true;
+    });
+  });*/
+
 };
+
+
 
 $(document).on('click', '#save', function(e){
   // TODO: Perform DB operation to save the values
@@ -100,6 +127,38 @@ $(document).on('click', '#save', function(e){
   var data = [].concat($container.data('handsontable').getData());
   console.log(JSON.stringify({header: data.shift()}));
   console.log(JSON.stringify({data: data}));
+  var url = 'http://104.236.140.70:9000/site';
+  var postData = {sheetName: selectedSheet, metaData: JSON.stringify($container.data('handsontable').getData())};
+  $('#status').show();
+  $.post(url, postData, function(data, status){
+    console.log("Data:" + data + "\nStatus:" + status);
+    $('#status').hide();
+    window.location.href = 'version.html?context=' + selectedSheet;
+  })
+      .done(function(){
+
+      })
+          .fail(function(){
+alert("Error occurred!");
+          })
+      .always(function(){
+
+      });
+  /*$.ajax({
+    url:url,
+    type:'POST',
+    contentType:'json',
+    data: postData,
+    success: function(data, success){
+      console.log("Success!!");
+      console.log(data);
+      console.log(status);
+    },
+    error: function(xhr, desc, err){
+      console.log(xhr);
+      console.log("Desc: " + desc + "\nErr:" + err);
+    }
+  })*/
 });
 
 /** Drop it like it's hot **/
