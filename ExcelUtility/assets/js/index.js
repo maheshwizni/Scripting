@@ -75,7 +75,7 @@ $(document).on('click', '.viewsystems', function(e){
     });
     var oTable = $('#sysTbl').dataTable();
     oTable.fnClearTable();
-    oTable.fnAddData(systemsJson);//($.trim($this.data('val')), 0 );
+    oTable.fnAddData($.unique(systemsJson));//($.trim($this.data('val')), 0 );
     $('ul.nav.nav-tabs > li > a[href="#CyberSystem"]').tab('show');
 });
 
