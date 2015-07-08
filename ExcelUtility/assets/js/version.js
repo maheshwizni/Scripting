@@ -1,7 +1,7 @@
 /**
  * Created by WizniDev on 7/6/2015.
  */
-
+var url = baseUrl;
 /** Handsontable magic **/
 var boldRenderer = function (instance, td, row, col, prop, value, cellProperties) {
     Handsontable.TextCell.renderer.apply(this, arguments);
@@ -46,18 +46,23 @@ $(document).ready(function() {
     //Get sheetname
     var sheet = getUrlParameter('context');
     if(sheet)
-    $('#context').val(sheet);
+        $('#context').val(sheet);
     //Initialize table
-    $('#context').trigger('change');
+    initSheet();
 
 });
 var selectedSheet;
 $(document).on('change', '#context', function(e){
+    console.log('Change of sheet called...');
+    initSheet();
+});
+
+function initSheet(){
     selectedSheet = $('#context').val();
     console.log(selectedSheet);
     loadVersions(selectedSheet);
-});
-var url = baseUrl;
+};
+
 function loadVersions(sheetName){
     $('#hot').hide();
   $('#version option').remove();
