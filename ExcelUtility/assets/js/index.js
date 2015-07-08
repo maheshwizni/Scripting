@@ -7,6 +7,10 @@ $(document).ready( function () {
     loadData('CyberAsset', loadAssetsData);
 });
 
+var sites = [];
+var assets = [];
+var systems = [];
+
 function loadSitesData(cols, json){
     buildTable('siteTbl', cols, json);
 };
@@ -30,9 +34,8 @@ function buildTable(tableName, cols, json){
                     '<button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">' + data["Site Name"] + '<span class="caret"></span></button>' +
                 '<ul class="dropdown-menu">' +
                     '<li><a href="javascript:void(0);" class="viewasset" data-val="' + data["Site Name"] + '">View Assets</a></li>' +
+                    '<li class="divider"></li>'+
                 '<li><a href="javascript:void(0);" class="viewsystems" data-val="' + data["Site Name"] + '">View Systems</a></li>'+
-                '<li class="divider"></li>'+
-                    '<li><a href="javascript:void(0);" class="viewboth" data-val="' + data["Site Name"] + '">View Both</a></li>'+
                 '</ul></div>');
             }
         }
@@ -56,6 +59,24 @@ $(document).on('click', '.viewsystems', function(e){
     e.preventDefault();
     var $this = $(this);
     console.log($this.data('val'));
+
+    //var json = systems
+    var systemNames = [];
+    $.each(assets, function(index, value){
+        if($.trim(assets[index]["Site Name"]) === $.trim($this.data('val')))
+            systemNames.push(assets[index]["Cyber System"]);
+    });
+    var systemsJson = [];
+    $.each(systems, function(index,value){
+        $.each($.unique(systemNames), function(i,v){
+           if($.trim(systems[index]["Cyber System"]).indexOf($.trim(systemNames[i])) > -1)
+               systemsJson.push(systems[index]);
+        });
+    });
+    var oTable = $('#sysTbl').dataTable();
+    oTable.fnClearTable();
+    oTable.fnAddData(systemsJson);//($.trim($this.data('val')), 0 );
+    $('ul.nav.nav-tabs > li > a[href="#CyberSystem"]').tab('show');
 });
 
 $(document).on('click', '.clearFilter', function(e){
@@ -64,6 +85,15 @@ $(document).on('click', '.clearFilter', function(e){
     var oTable = $('#' + $this.data('val')).dataTable();
     fnResetAllFilters(oTable);
 });
+
+$(document).on('click', '.clearFilter2', function(e){
+    e.preventDefault();
+    var $this = $(this);
+    var oTable = $('#' + $this.data('val')).dataTable();
+    oTable.fnClearTable();
+    oTable.fnAddData(systems);//($.trim($this.data('val')), 0 );
+});
+
 
 function fnResetAllFilters(oTable) {
     var oSettings = oTable.fnSettings();
@@ -98,6 +128,11 @@ function loadData(sheetName, cb){
                     //optionally do some type detection here for render function
                 });
             });
+            switch(sheetName){
+                case 'Site': sites = data;break;
+                case 'CyberSystem': systems = data; break;
+                case 'CyberAsset': assets = data; break;
+            };
             cb(cols, data);
         })
         .error(function(xhr, desc, error){
