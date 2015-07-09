@@ -40,15 +40,17 @@
                 diffController.isOldNewVersionDataSame = false;
                 oldData = undefined;
                 newData = undefined;
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion - 1)
-                    .success(function (response) {
-                        oldData = response.metaData;
-                        diffController.oldVersionData = JSON.parse(oldData);
-                        diffController.isOldNewVersionDataSame = oldData == newData;
-                    })
-                    .error(function () {
-                        diffController.oldVersionData = undefined;
-                    });
+                if(diffController.selectedVersion != 1) {
+                    DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion - 1)
+                        .success(function (response) {
+                            oldData = response.metaData;
+                            diffController.oldVersionData = JSON.parse(oldData);
+                            diffController.isOldNewVersionDataSame = oldData == newData;
+                        })
+                        .error(function () {
+                            diffController.oldVersionData = undefined;
+                        });
+                }
                 DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion)
                     .success(function (response) {
                         newData = response.metaData;
