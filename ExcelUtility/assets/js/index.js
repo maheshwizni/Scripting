@@ -7,6 +7,8 @@ $(document).ready( function () {
     loadData('CyberAsset', loadAssetsData);
 });
 
+var oldRow, oldTr;
+
 var sites = [];
 var assets = [];
 var systems = [];
@@ -30,19 +32,115 @@ function buildTable(tableName, cols, json){
         "createdRow": function ( row, data, index ) {
             if(tableName === 'siteTbl'){
                 //If Sites, make the first column as template for lookup
-                $('td', row).eq(0).html('<div class="btn-group">' +
+                /*$('td', row).eq(0).html('<div class="btn-group">' +
                     '<button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">' + data["Site Name"] + '<span class="caret"></span></button>' +
                 '<ul class="dropdown-menu">' +
                     '<li><a href="javascript:void(0);" class="viewasset" data-val="' + data["Site Name"] + '">View Assets</a></li>' +
                     '<li class="divider"></li>'+
                 '<li><a href="javascript:void(0);" class="viewsystems" data-val="' + data["Site Name"] + '">View Systems</a></li>'+
-                '</ul></div>');
+                '</ul></div>');*/
+                $('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>')
             }
+/*            if(tableName === 'sysTbl'){
+                //If Sites, make the first column as template for lookup
+                /!*$('td', row).eq(0).html('<div class="btn-group">' +
+                 '<button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">' + data["Site Name"] + '<span class="caret"></span></button>' +
+                 '<ul class="dropdown-menu">' +
+                 '<li><a href="javascript:void(0);" class="viewasset" data-val="' + data["Site Name"] + '">View Assets</a></li>' +
+                 '<li class="divider"></li>'+
+                 '<li><a href="javascript:void(0);" class="viewsystems" data-val="' + data["Site Name"] + '">View Systems</a></li>'+
+                 '</ul></div>');*!/
+                $('td', row).eq(0).html('<td class="details-control2"><label style="align-content:right">' + data["Cyber System"] + '</label></td>')
+            }*/
         }
     });
 
     table.rows.add(json).draw();
+if(tableName === 'siteTbl') {
+    $('#siteTbl tbody').on('click', 'div.details-control', function () {
+        debugger;
+        var tr = $(this).closest('tr');
+        //var table = $('#sysTbl').DataTable();
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+           /* row.child('Dummy Content').hide();
+            tr.removeClass('shown');*/
+        }
+        else {
+            // Open this row
+            //show all Cyber Systems here
+            row.child(['<h3>Cyber Systems</h3>', formatCyberSystems( row.data()), '<h3>Cyber Assets</h3>', formatCyberAssets( row.data()), "<h3>&nbsp;</h3>"], 'child-row').show();
+            tr.addClass('shown');
+            // Hide Old row
+            if(oldTr){
+                table.row(oldTr).child('Dummy Content').hide();
+                oldTr.removeClass('shown');
+            }
+            oldTr = tr;
+        }
+    });
+}
+    /*if(tableName === 'sysTbl') {
+        $('#siteTbl tbody').on('click', 'td.details-control2', function () {
+            debugger;
+            var tr = $(this).closest('tr');
+            //var table = $('#sysTbl').DataTable();
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                //show all Cyber Systems here
+                row.child(formatCyberAssets( row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+    }*/
 };
+
+function formatCyberSystems (data) {
+    // `d` is the original data object for the row
+    debugger;
+    var siteName = data["Site Name"];
+    var systemNames = [];
+    $.each(assets, function(index, value){
+        if($.trim(assets[index]["Site Name"]) === $.trim(siteName))
+            systemNames.push(assets[index]["Cyber System"]);
+    });
+    var systemsJson = [];
+    $.each(systems, function(index,value){
+        $.each($.unique(systemNames), function(i,v){
+            if($.trim(systems[index]["Cyber System"]).indexOf($.trim(systemNames[i])) > -1)
+                systemsJson.push(systems[index]);
+        });
+    });
+    var oTable = $('#sysTbl').dataTable();
+    oTable.fnClearTable();
+    oTable.fnAddData($.unique(systemsJson));//($.trim($this.data('val')), 0 );
+    return oTable;
+}
+
+function formatCyberAssets (data) {
+    // `d` is the original data object for the row
+    debugger;
+    var siteName = data["Site Name"];
+    var relevantAssets = [];
+    $.each(assets, function(index, value){
+        if($.trim(assets[index]["Site Name"]) === $.trim(siteName))
+            relevantAssets.push(assets[index]);
+    });
+    var oTable = $('#assetTbl').dataTable();
+    oTable.fnClearTable();
+    oTable.fnAddData($.unique(relevantAssets));//($.trim($this.data('val')), 0 );
+    return oTable;
+}
+
 
 $(document).on('click', '.viewasset', function(e){
     debugger;

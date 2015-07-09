@@ -67,6 +67,16 @@ var myRenderer = function (instance, td, row, col, prop, value, cellProperties) 
     $(td).addClass('changeInput');
   }
 };
+
+$(document).on('click','#btndownloadfile', function(e){
+  debugger;
+  e.preventDefault();
+  var remoteUrl = 'http://spf2010.wizni.com/Shared%20Docs/2-Sites.xlsx';
+  $.get(remoteUrl, function(data){
+    console.log('Done...');
+  })
+});
+
 var selectedSheet;
 var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   //$('#footnote').hide();

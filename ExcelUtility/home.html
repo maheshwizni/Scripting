@@ -12,14 +12,37 @@
     <script src="assets/vendor/toastr.min.js"></script>
     -->
 
+    <style type="text/css">
+        div.details-control {
+            background: url('assets/img/details_open.png') no-repeat right;
+            cursor: pointer;
+            width:150px;
+        }
+        tr.shown div.details-control {
+            background: url('assets/img/details_close.png') no-repeat right;
+        }
+        .child-row{
+            background-color: azure;
+        }
+        /*td.details-control2 {
+            background: url('assets/img/details_open.png') no-repeat left center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control2 {
+            background: url('assets/img/details_close.png') no-repeat left center;
+        }*/
+    </style>
 </head>
 <body>
 <div class="container">
     <h1>
-        Imported Data
+        Sites
     </h1>
+    <a href="javascript:void(0);" class="clearFilter" data-val="siteTbl">Clear Filter</a>
+    <table id="siteTbl" class="display" width="100%">
+    </table>
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-tabs" role="tablist" style="display:none">
         <li class="active"><a href="#Site" role="tab" data-toggle="tab">Sites</a></li>
         <li><a href="#CyberSystem" role="tab" data-toggle="tab">Cyber Systems</a></li>
         <li><a href="#CyberAsset" role="tab" data-toggle="tab">Cyber Assets</a></li>
@@ -28,9 +51,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active" id="Site">
-            <a href="javascript:void(0);" class="clearFilter" data-val="siteTbl">Clear Filter</a>
-            <table id="siteTbl" class="display" width="100%">
-            </table>
+
         </div>
         <div class="tab-pane" id="CyberSystem">
             <a href="javascript:void(0);" class="clearFilter2" data-val="sysTbl">Clear Filter</a>
