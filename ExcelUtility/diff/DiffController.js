@@ -51,7 +51,7 @@
                     });
                 DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion)
                     .success(function (response) {
-                        var newData = response.metaData;
+                        newData = response.metaData;
                         diffController.newVersionData = JSON.parse(newData);
                         diffController.isOldNewVersionDataSame = oldData == newData;
                     })
