@@ -1,0 +1,17 @@
+{
+  "name": "ExcelUtility",
+  "version": "1.0.0",
+  "description": "sheetjs.github.io =================",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Amit Thakkar",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.4.2"
+  }
+}
