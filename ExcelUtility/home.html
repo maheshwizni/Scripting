@@ -24,6 +24,9 @@
         .child-row{
             background-color: azure;
         }
+        .boldContent{
+            font-weight: bold;
+        }
         /*td.details-control2 {
             background: url('assets/img/details_open.png') no-repeat left center;
             cursor: pointer;
@@ -34,15 +37,13 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" style="width:1800px;">
     <h1>
-        Sites
+        User View
     </h1>
-    <a href="javascript:void(0);" class="clearFilter" data-val="siteTbl">Clear Filter</a>
-    <table id="siteTbl" class="display" width="100%">
-    </table>
+
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist" style="display:none">
+    <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#Site" role="tab" data-toggle="tab">Sites</a></li>
         <li><a href="#CyberSystem" role="tab" data-toggle="tab">Cyber Systems</a></li>
         <li><a href="#CyberAsset" role="tab" data-toggle="tab">Cyber Assets</a></li>
@@ -51,10 +52,12 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active" id="Site">
-
+            <a href="javascript:void(0);" class="clearFilter" data-val="siteTbl">Clear Filter</a>
+            <table id="siteTbl" class="display" width="100%">
+            </table>
         </div>
         <div class="tab-pane" id="CyberSystem">
-            <a href="javascript:void(0);" class="clearFilter2" data-val="sysTbl">Clear Filter</a>
+            <a href="javascript:void(0);" class="clearFilter" data-val="sysTbl">Clear Filter</a>
             <table id="sysTbl" class="display" width="100%">
             </table>
         </div>
@@ -65,7 +68,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="DescModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+            <div class="modal-body" id="modalBody">
 
-<script src="assets/js/index.js"></script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script src="assets/js/home.js"></script>
 </body>
 </html>

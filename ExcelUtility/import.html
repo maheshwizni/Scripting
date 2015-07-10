@@ -11,9 +11,9 @@
         <!--<link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
         <script src="assets/vendor/jquery.min.js"></script>
         <script src="assets/vendor/bootstrap.min.js"></script>-->
-        <script src="assets/vendor/jquery.handsontable.full.js"></script>
+        <!--<script src="assets/vendor/jquery.handsontable.full.js"></script>
 
-        <link rel="stylesheet" media="screen" href="assets/vendor/jquery.handsontable.full.css">
+        <link rel="stylesheet" media="screen" href="assets/vendor/jquery.handsontable.full.css">-->
         <link rel="stylesheet" media="screen" href="assets/vendor/samples.css">
         <link rel="stylesheet" media="screen" href="assets/vendor/alertify.css">
         <div class="container">
@@ -21,26 +21,24 @@
                 <div id="body">
                     <div id="left">
                     <div id="drop">Drop a file here</div>
-                    <div id="buttons"></div>
                     </div>
                 </div>
                 <div id="right">
-                    <!--<div>
+                    <div style="display:none">
                         <input type="button" value="Get File" id="btndownloadfile" class="btn-lg btn-success">
-                    </div>-->
+                    </div>
                     <div id="header">
                         <h2>
                             Upload excel file
                         </h2>
-                        <h3>
-                            (XLS/XLSX/XLSM/XLSB/XML) in the box to the left to see a preview
-                        </h3>
                     </div>
+                    <div id="buttons"></div>
                     <div class="row">
-                        <h3 id="sheet"></h3>
+                        <h2 id="sheet"></h2>
                     </div>
-                    <div id="hot" style="overflow: scroll" class="handsontable"></div>
-                    <div id="divSave"><input id="save" class="btn-lg btn-success pull-right" type="button" value="Save"> </div>
+                    <!--<div id="hot" style="overflow: scroll" class="handsontable"></div>-->
+                    <div id="tables"></div>
+                    <div id="divSave"><input id="save" class="btn-lg btn-success" type="button" value="Save"> </div>
                     <div id="status" class="alert">Processing data...</div>
                 </div>
         </div>
@@ -51,7 +49,7 @@
         <script src="assets/js/jszip.js"></script>
         <script src="assets/js/xlsx.js"></script>
         <script src="assets/js/dropsheet.js"></script>
-        <script src="assets/js/main.js"></script>
+        <script src="assets/js/import.js"></script>
 
         <script src="assets/vendor/spin.js"></script>
 
