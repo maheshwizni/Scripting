@@ -4,10 +4,13 @@
 (function (ng) {
     var diffModule = ng.module('diff', []);
     diffModule.filter('range', function () {
-        return function (max) {
+        return function (max, min) {
+            if(min == undefined) {
+                min = 1;
+            }
             var versions = [];
             max = parseInt(max);
-            for (var i = 1; i < max; i++) {
+            for (var i = min; i < max; i++) {
                 versions.push(i);
             }
             return versions;
