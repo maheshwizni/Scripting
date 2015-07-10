@@ -36,21 +36,21 @@ function buildTable(tableName, cols, json){
             if(tableName === 'siteTbl'){
                 //If Sites, make the first column as template for lookup
                 $('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>');
-                if(cols.length > defaultLength){
+                if(data["Site Name"] && cols.length > defaultLength){
                     $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
             if(tableName === 'sysTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(cols.length > defaultLength){
+                if(data["Cyber System"] && cols.length > defaultLength){
                     $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Cyber System" data-title="'+ data["Cyber System"] +'" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
             if(tableName === 'assetTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(cols.length > defaultLength){
+                if(data["Cyber Asset Name or Unique ID"] && cols.length > defaultLength){
                     $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
@@ -105,7 +105,7 @@ function formatCyberSystems (data) {
         "createdRow": function ( row, data, index ) {
                         //If Sites, make the first column as template for lookup
                         //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                        if(systemCols.length > defaultLength){
+                        if(data["Cyber System"] && systemCols.length > defaultLength){
                             $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[systemCols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber System"] +'" data-key="Cyber System" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
                         }
         }
@@ -130,7 +130,7 @@ function formatCyberAssets (data) {
         "createdRow": function ( row, data, index ) {
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(assetCols.length > defaultLength){
+                if(data["Cyber Asset Name or Unique ID"] && assetCols.length > defaultLength){
                     $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[assetCols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
                 }
         }
