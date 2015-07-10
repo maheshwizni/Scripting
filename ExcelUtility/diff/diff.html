@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="diff">
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        .bg_oldValue {
+           background-color: #dff1de;
+        }
+        .bg_newValue {
+           background-color: #a9f19e;
+        }
+    </style>
+</head>
+<body>
+<div ng-controller="DiffController as diffController">
+    Sheet Name:
+    <select ng-model="diffController.selectedSheet"
+            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
+        <option value="">-- Choose Sheet Name --</option>
+    </select>
+    Version Number:
+    <select ng-model="diffController.selectedVersion"
+            ng-options="n for n in diffController.selectedSheet.version | range">
+        <option value="">-- Choose Version --</option>
+    </select>
+    <input type="button" value="Show Diff" ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
+    <span>{{diffController.error}}</span>
+    <hr/>
+    <span ng-show="diffController.isOldNewVersionDataSame">No changes in this version.</span>
+    <table ng-if="!diffController.isOldNewVersionDataSame">
+        <tr ng-repeat="rowNumbe in diffController.newVersionData.length | range">
+            <td>
+                <table>
+                    <tr>
+                        <td ng-class="{bg_oldValue: diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]}" ng-repeat="(key, value) in diffController.oldVersionData[rowNumbe]">{{value}}</td>
+                    </tr>
+                    <tr>
+                        <td ng-class="{bg_newValue: diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]}" ng-repeat="(key, value) in diffController.newVersionData[rowNumbe]"> {{value}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="application/javascript" src="../node_modules/angular/angular.js"></script>
+<script type="application/javascript" src="DiffController.js"></script>
+</body>
+</html>
