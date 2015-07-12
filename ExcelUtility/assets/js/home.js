@@ -66,6 +66,8 @@ function buildTable(tableName, cols, json){
 
             if (row.child.isShown()) {
                 // This row is already open - close it
+                table.row(tr).child('Dummy Content').hide();
+                tr.removeClass('shown');
             }
             else {
                 // Open this row
@@ -191,7 +193,7 @@ $(document).on('click', 'a.moreDetail', function (e) {
     var datakey = $this.data('key');
     $('#modalTitle').text(title);
     var html = $('<div/>');
-    debugger;
+    //debugger;
     $.each(obj, function(index,value){
        if($.trim(obj[index][datakey]) === $.trim(val)){
            var result = obj[index];

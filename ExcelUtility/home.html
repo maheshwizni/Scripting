@@ -27,6 +27,11 @@
         .boldContent{
             font-weight: bold;
         }
+        @media screen and (min-width: 768px) {
+            .custom-class {
+                width: 70%; /* either % (e.g. 60%) or px (400px) */
+            }
+        }
         /*td.details-control2 {
             background: url('assets/img/details_open.png') no-repeat left center;
             cursor: pointer;
@@ -69,7 +74,7 @@
     </div>
 </div>
 <div class="modal fade" id="DescModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog custom-class">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
