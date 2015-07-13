@@ -70,7 +70,6 @@
             }
         };
         diffController.isSameRow = function(oldRow, newRow) {
-            console.log(ng.equals(oldRow, newRow));
             return ng.equals(oldRow, newRow);
         };
     }]);
