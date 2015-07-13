@@ -24,9 +24,14 @@
             ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
         <option value="">-- Choose Sheet Name --</option>
     </select>
-    Version Number:
-    <select ng-model="diffController.selectedVersion"
+    Version From:
+    <select ng-model="diffController.selectedToVersion"
             ng-options="n for n in diffController.selectedSheet.version | range">
+        <option value="">-- Choose Version --</option>
+    </select>
+    To:
+    <select ng-model="diffController.selectedFromVersion"
+            ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedToVersion + 1">
         <option value="">-- Choose Version --</option>
     </select>
     <input type="button" value="Show Diff" ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
