@@ -12,6 +12,7 @@
   "author": "Amit Thakkar",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.4.2"
+    "angular": "^1.4.2",
+    "angular-route": "^1.4.2"
   }
 }

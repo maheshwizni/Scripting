@@ -1,0 +1,56 @@
+<style>
+    td.bg_oldValue {
+        background-color: #f1c1c1;
+    }
+
+    td.bg_newValue {
+        background-color: #84f172;
+    }
+</style>
+Sheet Name:
+<select ng-model="diffController.selectedSheet"
+        ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
+    <option value="">-- Choose Sheet Name --</option>
+</select>
+Version From:
+<select ng-model="diffController.selectedToVersion"
+        ng-options="n for n in diffController.selectedSheet.version | range">
+    <option value="">-- Choose Version --</option>
+</select>
+To:
+<select ng-model="diffController.selectedFromVersion"
+        ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedToVersion + 1">
+    <option value="">-- Choose Version --</option>
+</select>
+<input type="button" value="Show Diff" ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
+<span>{{diffController.error}}</span>
+<hr/>
+<span ng-show="diffController.isOldNewVersionDataSame">No changes in this version.</span>
+<div ng-if="!diffController.isOldNewVersionDataSame" class="table"
+     ng-repeat="rowNumbe in diffController.newVersionData.length | range : 0">
+    <table border="1px solid gray"
+           ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])">
+        <tr>
+            <td>Row Number</td>
+            <td ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                {{::value}}
+            </td>
+        </tr>
+        <tr>
+            <td>{{ $index+1 }}</td>
+            <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                {{ ::diffController.oldVersionData[rowNumbe][key] || '-' }}
+            </td>
+        </tr>
+        <tr>
+            <td>{{ $index+1 }}</td>
+            <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                {{ ::diffController.newVersionData[rowNumbe][key] || '-' }}
+            </td>
+        </tr>
+    </table>
+    <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"/>
+</div>
