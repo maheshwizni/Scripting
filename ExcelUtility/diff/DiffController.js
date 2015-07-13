@@ -69,5 +69,9 @@
                 diffController.error = 'Please Select Version Number';
             }
         };
+        diffController.isSameRow = function(oldRow, newRow) {
+            console.log(ng.equals(oldRow, newRow));
+            return ng.equals(oldRow, newRow);
+        };
     }]);
 })(angular);
