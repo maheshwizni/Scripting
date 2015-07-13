@@ -37,23 +37,28 @@
          ng-repeat="rowNumbe in diffController.newVersionData.length | range : 0">
         <table border="1px solid gray" ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])">
             <tr>
-                <td ng-repeat="(key, value) in ::diffController.oldVersionData[0]">
-                    {{value}}
+                <td>Row Number</td>
+                <td ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                    ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                {{value}}
                 </td>
             </tr>
             <tr>
-                <td ng-class="{bg_oldValue: diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]}"
-                    ng-repeat="(key, value) in ::diffController.oldVersionData[0]">
+                <td>{{ $index+1 }}</td>
+                <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
                     {{ diffController.oldVersionData[rowNumbe][key] || '-' }}
                 </td>
             </tr>
             <tr>
-                <td ng-class="{bg_newValue: diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]}"
-                    ng-repeat="(key, value) in ::diffController.oldVersionData[0]">
+                <td>{{ $index+1 }}</td>
+                <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                    ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
                     {{ diffController.newVersionData[rowNumbe][key] || '-' }}
                 </td>
             </tr>
         </table>
+        <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])" />
     </div>
 </div>
 <script type="application/javascript" src="../node_modules/angular/angular.js"></script>
