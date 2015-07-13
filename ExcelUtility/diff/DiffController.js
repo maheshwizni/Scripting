@@ -36,15 +36,15 @@
         var oldData = undefined;
         var newData = undefined;
         diffController.showDiff = function () {
-            if (diffController.selectedSheet && diffController.selectedVersion) {
+            if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
                 diffController.newVersionData = undefined;
                 diffController.isOldNewVersionDataSame = false;
                 oldData = undefined;
                 newData = undefined;
-                if(diffController.selectedVersion != 1) {
-                    DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion - 1)
+                if(diffController.selectedToVersion != 1) {
+                    DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
                         .success(function (response) {
                             oldData = response.metaData;
                             diffController.oldVersionData = JSON.parse(oldData);
@@ -54,7 +54,7 @@
                             diffController.oldVersionData = undefined;
                         });
                 }
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedVersion)
+                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
                     .success(function (response) {
                         newData = response.metaData;
                         diffController.newVersionData = JSON.parse(newData);
@@ -65,8 +65,10 @@
                     });
             } else if (!diffController.selectedSheet) {
                 diffController.error = 'Please Select Sheet Name';
-            } else if (!diffController.selectedVersion) {
-                diffController.error = 'Please Select Version Number';
+            } else if (!diffController.selectedToVersion) {
+                diffController.error = 'Please Select To Version Number';
+            } else if (!diffController.selectedFromVersion) {
+                diffController.error = 'Please Select From Version Number';
             }
         };
         diffController.isSameRow = function(oldRow, newRow) {
