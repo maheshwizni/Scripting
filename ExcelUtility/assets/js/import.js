@@ -45,6 +45,8 @@ $(document).ready(function() {
   $('#divSave').hide();
   $('#hot').hide();
   $('#status').hide();
+  $('#configureGroups').hide();
+
 });
 
 /* make the buttons for the sheets */
@@ -57,7 +59,9 @@ var make_buttons = function(sheetnames, cb) {
   sheetnames.forEach(function(s,idx) {
     var button= $('<button class="btn-lg btn-warning"/>').attr({ type:'button', name:'btn' +idx, text:s });
     button.append(s);
-    button.click(function() { selectedIdx = idx; cb(idx); });
+    button.click(function() {
+      selectedIdx = idx; cb(idx);
+    });
     $buttons.append(button);
     $buttons.append('&nbsp;&nbsp;');
     var tbl = $('<table id="'+ s.replace(/ /g,'') +'" class="display" width="100%"></table>');
@@ -84,10 +88,12 @@ $(document).on('click','#btndownloadfile', function(e){
 
 var selectedSheet;
 var jsonData;
+var jsonColsData;
 var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   //$('#footnote').hide();
   $('#divSave').show();
   $('#hot').show();
+  $('#configureGroups').show();
   make_buttons(sheetnames, select_sheet_cb);
   //calculateSize();
 
@@ -134,7 +140,7 @@ $(document).on('click', '#save', function(e){
   if(selectedSheet.indexOf('Cyber Asset') > -1)
     simplifiedSelectedSheet = 'CyberAsset';
   console.log(simplifiedSelectedSheet);
-  var postData = {sheetName: simplifiedSelectedSheet, metaData: JSON.stringify(jsonData)};
+  var postData = {sheetName: simplifiedSelectedSheet, metaData: JSON.stringify(jsonData), groupData: JSON.stringify(jsonColsData)};
   toastr.info('Upload in progress...');
   $.post(url, postData, function(data, status){
     console.log("Data:" + data + "\nStatus:" + status);
@@ -145,6 +151,61 @@ $(document).on('click', '#save', function(e){
       /*$('#status').hide();*/
       toastr.error("Error occurred!");
   })
+});
+var isInitiaized;
+$(document).on('click', '#configureGroups', function(e){
+  e.preventDefault();
+  console.log(selectedSheet);
+  if(isInitiaized) {
+    $("#colGroupPrimary").multiselect("destroy");
+    //$('#colGroupPrimary').multiselect('refresh');
+  }
+  $('#modalTitle').text(selectedSheet);
+  var data = [].concat(jsonData);
+  var keys = Object.keys(data.shift());
+  var cols = [];
+  keys.forEach(function(k) {
+    cols.push({
+      title: k,
+      data: k
+      //optionally do some type detection here for render function
+    });
+  });
+  $('#colGroupPrimary option').remove();
+  debugger;
+  $.each(cols, function(index, value){
+    $('#colGroupPrimary').append(new Option(value.title, index));
+  });
+  //$('#modalBody').html(html);
+  isInitiaized = true;
+  $('#colGroupPrimary').multiselect({
+    includeSelectAllOption: false
+  });
+  $('#DescModal').modal("show");
+});
+
+$(document).on('click', '#btnConfigureGroups', function(e){
+debugger;
+var sel = $('#colGroupPrimary').val();
+  var data = [].concat(jsonData);
+  var keys = Object.keys(data.shift());
+  var cols = [];
+  keys.forEach(function(k) {
+    cols.push({
+      title: k,
+      data: k
+      //optionally do some type detection here for render function
+    });
+  });
+  var selectedCols = [];
+  $.each(sel, function(idx, val){
+    $.each(cols, function(index, value){
+      if(val == index){
+        selectedCols.push(value.title);
+      }
+    })
+  });
+  jsonColsData = {Primary: selectedCols};
 });
 
 /** Drop it like it's hot **/
