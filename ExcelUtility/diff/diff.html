@@ -63,7 +63,7 @@
             <div class="col-md-8">
                 <label class="col-md-3 control-label">Version From:</label>
                 <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedToVersion"
+                    <select class="form-control" ng-model="diffController.selectedFromVersion"
                             ng-options="n for n in diffController.selectedSheet.version | range">
                         <option value="">-- Choose Version --</option>
                     </select>
@@ -75,8 +75,8 @@
             <div class="col-md-8">
                 <label class="col-md-3 control-label">Version To:</label>
                 <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedFromVersion"
-                            ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedToVersion + 1">
+                    <select class="form-control" ng-model="diffController.selectedToVersion"
+                            ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedFromVersion + 1">
                         <option value="">-- Choose Version --</option>
                     </select>
                 </div>
