@@ -4,8 +4,11 @@
 
 var oldTr;
 var sites = [];
+var sitesPrimaryCols = [];
 var assets = [];
+var assetsPrimaryCols = [];
 var systems = [];
+var systemsPrimaryCols = [];
 var assetCols = [];
 var systemCols = [];
 var defaultLength = 9;
@@ -16,57 +19,101 @@ $(document).ready( function () {
     loadData('CyberAsset', loadAssetsData);
 });
 
-function loadSitesData(cols, json){
-    buildTable('siteTbl', cols, json);
+function loadSitesData(cols, json, columnsAdded){
+    buildTable('siteTbl', cols, json, columnsAdded);
 };
 
-function loadSystemsData(cols, json){
-    buildTable('sysTbl', cols, json);
+function loadSystemsData(cols, json, columnsAdded){
+    buildTable('sysTbl', cols, json, columnsAdded);
 };
 
-function loadAssetsData(cols, json){
-    buildTable('assetTbl', cols, json);
+function loadAssetsData(cols, json, columnsAdded){
+    buildTable('assetTbl', cols, json, columnsAdded);
 };
 
-function buildTable(tableName, cols, json){
-    var table = $('#'+tableName).DataTable({
-        columns: cols.length > defaultLength? cols.slice(0,defaultLength): cols,
+function buildTable(tableName, cols, json, columnsAdded){
+    //var columnsAdded = cols.length > defaultLength? cols.slice(0,defaultLength): cols;
+
+    var table = $('#'+tableName).dataTable({
+        columns: columnsAdded,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
             if(tableName === 'siteTbl'){
                 //If Sites, make the first column as template for lookup
                 $('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>');
-                if(data["Site Name"] && cols.length > defaultLength){
-                    $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Detail...</a></div>');
+                if(data["Site Name"]){
+                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
             if(tableName === 'sysTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(data["Cyber System"] && cols.length > defaultLength){
-                    $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Cyber System" data-title="'+ data["Cyber System"] +'" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
+                if(data["Cyber System"]){
+                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Cyber System" data-title="'+ data["Cyber System"] +'" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
             if(tableName === 'assetTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(data["Cyber Asset Name or Unique ID"] && cols.length > defaultLength){
-                    $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[cols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
+                if(data["Cyber Asset Name or Unique ID"]){
+                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
                 }
             }
         }
     });
+    table.fnAddData(json);
 
-    table.rows.add(json).draw();
+    var groupBy = $('#groupBy' + tableName);
+    if(groupBy){
+        $('#groupBy' + tableName + ' option').remove();
+        $('#groupBy' + tableName).append(new Option('NONE'));
+        $.each(columnsAdded, function(index, value){
+            $('#groupBy' + tableName).append(new Option(value.title, index));
+        });
+
+        $(document).on('change', '#groupBy' + tableName, function(e){
+            $this = $(this);
+            var selectedVal = $('#groupBy' + tableName).val();
+            console.log(selectedVal);
+            debugger;
+            // Clear Grouping First
+            var oSettings = table.dataTableSettings[0];
+            for (var f = 0; f < oSettings.aoDrawCallback.length; f++) {
+                if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
+                    oSettings.aoDrawCallback.splice(f, 1);
+                    break;
+                }
+            }
+            oSettings.aaSortingFixed = null;
+            if(selectedVal === 'NONE'){
+                // Clear Table and Redraw
+                table.fnClearTable();
+                table.fnAddData(sites);
+            }else {
+                table.rowGrouping({
+                    //bExpandableGrouping: true,GroupingColumnIndex:5,bHideGroupingColumn: false,asExpandedGroups:[]
+                    iGroupingColumnIndex: selectedVal,
+                    sGroupingColumnSortDirection: "asc",
+                    //iGroupingOrderByColumnIndex: 0,
+                    bExpandableGrouping: true,
+                    bHideGroupingColumn: false,
+                    asExpandedGroups: [],
+                    fnOnGrouped: function() {
+                        console.log('Rows are regrouped!');
+                    }
+                });
+            }
+        });
+    }
     if(tableName === 'siteTbl') {
         $('#siteTbl tbody').on('click', 'div.details-control', function () {
             var tr = $(this).closest('tr');
             //var table = $('#sysTbl').DataTable();
-            var row = table.row(tr);
+            var row = table.api().row(tr);
 
             if (row.child.isShown()) {
                 // This row is already open - close it
-                table.row(tr).child('Dummy Content').hide();
+                table.api().row(tr).child('Dummy Content').hide();
                 tr.removeClass('shown');
             }
             else {
@@ -76,7 +123,7 @@ function buildTable(tableName, cols, json){
                 tr.addClass('shown');
                 // Hide Old row
                 if(oldTr){
-                    table.row(oldTr).child('Dummy Content').hide();
+                    table.api().row(oldTr).child('Dummy Content').hide();
                     oldTr.removeClass('shown');
                 }
                 oldTr = tr;
@@ -102,13 +149,13 @@ function formatCyberSystems (data) {
     });
 
     var oTable = $('<table id="'+ siteName.replace(/ /g,'') +'" class="display" width="100%"></table>').dataTable({
-        columns: systemCols.length > defaultLength? systemCols.slice(0,defaultLength): systemCols,
+        columns: systemsPrimaryCols, //systemCols.length > defaultLength? systemCols.slice(0,defaultLength): systemCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
                         //If Sites, make the first column as template for lookup
                         //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                        if(data["Cyber System"] && systemCols.length > defaultLength){
-                            $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[systemCols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber System"] +'" data-key="Cyber System" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
+                        if(data["Cyber System"]){
+                            $('td', row).eq(systemsPrimaryCols.length-1).html('<div class="more-details">' + (data[systemsPrimaryCols[systemsPrimaryCols.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber System"] +'" data-key="Cyber System" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
                         }
         }
     });
@@ -127,13 +174,13 @@ function formatCyberAssets (data) {
             relevantAssets.push(assets[index]);
     });
     var oTable = $('<table id="'+ siteName.replace(/ /g,'') +'" class="display" width="100%"></table>').dataTable({
-        columns: assetCols.length > defaultLength? assetCols.slice(0,defaultLength): assetCols,
+        columns: assetsPrimaryCols, //assetCols.length > defaultLength? assetCols.slice(0,defaultLength): assetCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
-                if(data["Cyber Asset Name or Unique ID"] && assetCols.length > defaultLength){
-                    $('td', row).eq(defaultLength-1).html('<div class="more-details">' + (data[assetCols[defaultLength-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
+                if(data["Cyber Asset Name or Unique ID"]){
+                    $('td', row).eq(assetsPrimaryCols.length-1).html('<div class="more-details">' + (data[assetsPrimaryCols[assetsPrimaryCols.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
                 }
         }
     });
@@ -241,9 +288,14 @@ function loadData(sheetName, cb){
             if(data[index].sheetName === sheetName)
                 maxIndex = data[index].version;
         });
+        debugger;
         $.get(baseUrl + '/' + sheetName + '/' + maxIndex , function(data, status){
             console.log("Data: " + data + "\nStatus: " + status);
             var json = JSON.parse(data.metaData); //TODO: Get data from MongoDB
+            var groupData;
+            if(data.groupData)
+                groupData = JSON.parse(data.groupData);
+
             if(!json)
                 return;
             var cols = [];
@@ -257,12 +309,25 @@ function loadData(sheetName, cb){
                     //optionally do some type detection here for render function
                 });
             });
+
+            var primaryCols = [];
+            if(groupData && groupData.Primary) {
+                groupData.Primary.forEach(function (k) {
+                    primaryCols.push({
+                        title: k,
+                        data: k
+                    });
+                });
+            }else{
+                primaryCols = cols.length > defaultLength? cols.slice(0,defaultLength): cols;
+            }
+
             switch(sheetName){
-                case 'Site': sites = data;break;
-                case 'CyberSystem': systems = data; systemCols = cols; break;
-                case 'CyberAsset': assets = data; assetCols = cols; break;
+                case 'Site': sites = data; sitesPrimaryCols = primaryCols; break;
+                case 'CyberSystem': systems = data; systemsPrimaryCols = primaryCols; systemCols = cols; break;
+                case 'CyberAsset': assets = data; assetsPrimaryCols = primaryCols; assetCols = cols; break;
             };
-            cb(cols, data);
+            cb(cols, data, primaryCols);
         })
         .error(function(xhr, desc, error){
             console.log('An error occurred fetching data.' + xhr);

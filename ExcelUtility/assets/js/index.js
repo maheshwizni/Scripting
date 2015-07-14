@@ -5,12 +5,14 @@
 var baseUrl = 'http://104.236.140.70:9000/site';
 
 $(document).ready(function() {
-    var $this = $('#homemenu');
+    window.location.href="home.html";
+    /*var $this = $('#homemenu');
     setCurrent($this);
-    loadContent($this.children('a:first').data('val'));
+    loadContent($this.children('a:first').data('val'));*/
 });
+/*
 $(document).on('click', '.navmenu', function(e){
-    e.preventDefault();
+    //e.preventDefault();
     var $this = $(this);
     setCurrent($this.parent());
     loadContent($this.data('val'));
@@ -23,4 +25,4 @@ function loadContent(context){
 function setCurrent(obj){
     $('.menuitem').removeClass('active');
     obj.addClass('active');
-}
+}*/
