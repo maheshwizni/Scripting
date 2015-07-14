@@ -1,0 +1,22 @@
+<div>
+    <h2>
+        Version Administration
+    </h2>
+    <a href="#/import">Upload another excel file</a><br><br>
+    <label>Select Sheet:</label>
+    <select ng-model="versionController.selectedSheet" class="form-control"
+            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in versionController.sheetNameAndLatestVersion">
+        <option value="">-- Choose Sheet Name --</option>
+    </select>
+    <label> Select Version:</label>
+    <select ng-model="versionController.selectedToVersion" class="form-control"
+            ng-options="n for n in versionController.selectedSheet.version | range">
+        <option value="">-- Choose Version --</option>
+    </select>
+    <input type="button" value="Show Data">
+    <table>
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+</div>

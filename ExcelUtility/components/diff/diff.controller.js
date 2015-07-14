@@ -2,8 +2,8 @@
  * Created by Amit Thakkar on 09/07/15.
  */
 (function (ng) {
-    var diffModule = ng.module('diff', []);
-    diffModule.filter('range', function () {
+    var versionModule = ng.module('version');
+    versionModule.filter('range', function () {
         return function (max, min) {
             if(min == undefined) {
                 min = 1;
@@ -16,7 +16,7 @@
             return versions;
         };
     });
-    diffModule.service('DiffService', ['$http', function ($http) {
+    versionModule.service('DiffService', ['$http', function ($http) {
         var URL = 'http://104.236.140.70:9000/site';
         this.getSheetNameAndLatestVersion = function () {
             return $http.get(URL + '/sheetNameAndVersion');
@@ -25,7 +25,7 @@
             return $http.get(URL + '/' + sheetName + '/' + version);
         };
     }]);
-    diffModule.controller('DiffController', ['DiffService', function (DiffService) {
+    versionModule.controller('DiffController', ['DiffService', function (DiffService) {
         var diffController = this;
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
