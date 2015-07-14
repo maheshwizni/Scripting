@@ -89,6 +89,7 @@ $(document).on('click','#btndownloadfile', function(e){
 var selectedSheet;
 var jsonData;
 var jsonColsData;
+var isInitiaized;
 var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   //$('#footnote').hide();
   $('#divSave').show();
@@ -123,6 +124,34 @@ debugger;
   });
 
   oTable.rows.add(json).draw();
+
+  if(isInitiaized) {
+    $("#colGroupPrimary").multiselect("destroy");
+    //$('#colGroupPrimary').multiselect('refresh');
+  }
+  $('#modalTitle').text(selectedSheet);
+  var data = [].concat(jsonData);
+  var keys = Object.keys(data.shift());
+  /*var cols2 = [];
+  keys.forEach(function(k) {
+    cols.push({
+      title: k,
+      data: k
+      //optionally do some type detection here for render function
+    });
+  });*/
+  $('#colGroupPrimary option').remove();
+  debugger;
+  $.each(colsData, function(index, value){
+    $('#colGroupPrimary').append(new Option(value.title, index));
+  });
+  //$('#modalBody').html(html);
+  isInitiaized = true;
+  $('#colGroupPrimary').multiselect({
+    includeSelectAllOption: false
+  });
+  $('#DescModal').modal("show");
+
 }
 
 
@@ -152,7 +181,7 @@ $(document).on('click', '#save', function(e){
       toastr.error("Error occurred!");
   })
 });
-var isInitiaized;
+
 $(document).on('click', '#configureGroups', function(e){
   e.preventDefault();
   console.log(selectedSheet);
@@ -187,6 +216,10 @@ $(document).on('click', '#configureGroups', function(e){
 $(document).on('click', '#btnConfigureGroups', function(e){
 debugger;
 var sel = $('#colGroupPrimary').val();
+  if(!sel){
+    $('#DescModal').modal("show");
+    return;
+  }
   var data = [].concat(jsonData);
   var keys = Object.keys(data.shift());
   var cols = [];
@@ -206,6 +239,7 @@ var sel = $('#colGroupPrimary').val();
     })
   });
   jsonColsData = {Primary: selectedCols};
+  $('#DescModal').modal("hide");
 });
 
 /** Drop it like it's hot **/
