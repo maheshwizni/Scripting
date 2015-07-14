@@ -185,7 +185,7 @@ $(document).on('click', '#save', function(e){
 $(document).on('click', '#configureGroups', function(e){
   e.preventDefault();
   console.log(selectedSheet);
-  if(isInitiaized) {
+  /*if(isInitiaized) {
     $("#colGroupPrimary").multiselect("destroy");
     //$('#colGroupPrimary').multiselect('refresh');
   }
@@ -209,7 +209,7 @@ $(document).on('click', '#configureGroups', function(e){
   isInitiaized = true;
   $('#colGroupPrimary').multiselect({
     includeSelectAllOption: false
-  });
+  });*/
   $('#DescModal').modal("show");
 });
 
