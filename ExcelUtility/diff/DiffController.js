@@ -10,7 +10,7 @@
             }
             var versions = [];
             max = parseInt(max);
-            for (var i = min; i < max; i++) {
+            for (var i = min; i <= max; i++) {
                 versions.push(i);
             }
             return versions;
