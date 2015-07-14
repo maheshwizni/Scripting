@@ -18,6 +18,13 @@
             controllerAs: 'homeController',
             controllerUrl: 'components/home/home.controller.js'
         });
+        $routeProvider.when('/version', {
+            page: 'version',
+            templateUrl: 'components/version/_version.html',
+            controller: 'VersionController',
+            controllerAs: 'versionController',
+            controllerUrl: 'components/version/version.controller.js'
+        });
         $routeProvider.otherwise('/home');
     }]);
     versionModule.controller('MasterController', ['$rootScope', function ($rootScope) {
