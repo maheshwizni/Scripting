@@ -27,21 +27,31 @@
     }]);
     diffModule.controller('DiffController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
         var diffController = this;
+        usSpinnerService.spin('loadingSpin');
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
+                usSpinnerService.stop('loadingSpin');
                 diffController.sheetNameAndLatestVersion = response;
             }).error(function () {
                 diffController.sheetNameAndLatestVersion = [];
             });
         var oldData = undefined;
         var newData = undefined;
+        var showBothVersionDiff = function() {
+            if(oldData && newData) {
+                diffController.isOldNewVersionDataSame = oldData == newData;
+                usSpinnerService.stop('loadingSpin');
+                diffController.isShowingDiff = false;
+            }
+        };
         diffController.showDiff = function () {
-            usSpinnerService.spin('loadingSpin');
             if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
+                usSpinnerService.spin('loadingSpin');
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
                 diffController.newVersionData = undefined;
                 diffController.isOldNewVersionDataSame = false;
+                diffController.error = undefined;
                 oldData = undefined;
                 newData = undefined;
                 if (diffController.selectedToVersion != 1) {
@@ -49,7 +59,7 @@
                         .success(function (response) {
                             oldData = response.metaData;
                             diffController.newVersionData = JSON.parse(oldData);
-                            diffController.isOldNewVersionDataSame = oldData == newData;
+                            showBothVersionDiff();
                         })
                         .error(function () {
                             diffController.oldVersionData = undefined;
@@ -59,7 +69,7 @@
                     .success(function (response) {
                         newData = response.metaData;
                         diffController.oldVersionData = JSON.parse(newData);
-                        diffController.isOldNewVersionDataSame = oldData == newData;
+                        showBothVersionDiff();
                     })
                     .error(function () {
                         diffController.newVersionData = undefined;

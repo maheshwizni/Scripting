@@ -104,8 +104,8 @@
             </div>
             <span class="alert-danger">{{diffController.error}}</span>
             <hr/>
-            <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame">No changes in this version.</span>
-            <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="loadingSpin"></span>
+            <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame && !diffController.isShowingDiff">No changes in this version.</span>
+            <span style="position: absolute; left: 50%;" us-spinner="{radius:30, width:8, length: 16}" spinner-key="loadingSpin"></span>
 
             <div ng-if="!diffController.isOldNewVersionDataSame" class="table"
                  ng-repeat="rowNumbe in diffController.newVersionData.length | range : 0">
