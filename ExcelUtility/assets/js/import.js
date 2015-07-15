@@ -1,5 +1,6 @@
 /** drop target **/
 var _target = document.getElementById('drop');
+var _target2 = document.getElementById('files');
 
 /** Spinner **/
 var spinner;
@@ -248,6 +249,7 @@ var sel = $('#colGroupPrimary').val();
 /** Drop it like it's hot **/
 DropSheet({
   drop: _target,
+  fileSelect: _target2,
   on: {
     workstart: _workstart,
     workend: _workend,
