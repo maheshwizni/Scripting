@@ -40,97 +40,112 @@
             <ul class="nav navbar-nav">
                 <li id="homemenu" class="menuitem"><a class="navmenu" data-val="home" href="../home.html">Home</a></li>
                 <li class="menuitem"><a class="navmenu" data-val="import" href="../import.html">Import Excel</a></li>
-                <li class="menuitem"><a class="navmenu" data-val="version" href="../version.html">Version Administration</a></li>
+                <li class="menuitem"><a class="navmenu" data-val="version" href="../version.html">Version
+                    Administration</a></li>
                 <li class="menuitem active"><a class="navmenu" data-val="diff" href="diff.html">Version History</a></li>
             </ul>
         </div>
     </nav>
-<div class="container" style="float:left">
-    <h2>Version History</h2>
-    <div ng-controller="DiffController as diffController">
-        <div class="row">
-            <div class="col-md-8">
-                <label class="col-md-3 control-label">Sheet Name:</label>
-                <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedSheet"
-                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
-                        <option value="">-- Choose Sheet Name --</option>
-                    </select>
+    <div class="container" style="float:left">
+        <h2>Version History</h2>
+
+        <div ng-controller="DiffController as diffController">
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="col-md-3 control-label">Sheet Name:</label>
+
+                    <div class="col-md-9 selectContainer">
+                        <select class="form-control" ng-model="diffController.selectedSheet"
+                                ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
+                            <option value="">-- Choose Sheet Name --</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <br>
-            <div class="col-md-8">
-                <label class="col-md-3 control-label">Version From:</label>
-                <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedFromVersion"
-                            ng-options="n for n in diffController.selectedSheet.version | range">
-                        <option value="">-- Choose Version --</option>
-                    </select>
+            <div class="row">
+                <br>
+
+                <div class="col-md-8">
+                    <label class="col-md-3 control-label">Version From:</label>
+
+                    <div class="col-md-9 selectContainer">
+                        <select class="form-control" ng-model="diffController.selectedFromVersion"
+                                ng-options="n for n in diffController.selectedSheet.version | range">
+                            <option value="">-- Choose Version --</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <br>
-            <div class="col-md-8">
-                <label class="col-md-3 control-label">Version To:</label>
-                <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedToVersion"
-                            ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedFromVersion + 1">
-                        <option value="">-- Choose Version --</option>
-                    </select>
+            <div class="row">
+                <br>
+
+                <div class="col-md-8">
+                    <label class="col-md-3 control-label">Version To:</label>
+
+                    <div class="col-md-9 selectContainer">
+                        <select class="form-control" ng-model="diffController.selectedToVersion"
+                                ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedFromVersion + 1">
+                            <option value="">-- Choose Version --</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <br>
-            <div class="col-md-8">
-                <label class="col-md-3 control-label">&nbsp;</label>
-                <div class="col-md-9">
-                    <input type="button" class="btn-lg btn-success pull-left" value="Show Diff" ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
+            <div class="row">
+                <br>
+
+                <div class="col-md-8">
+                    <label class="col-md-3 control-label">&nbsp;</label>
+
+                    <div class="col-md-9">
+                        <input type="button" class="btn-lg btn-success pull-left" value="Show Diff"
+                               ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
+                    </div>
                 </div>
             </div>
-        </div>
-        <span class="alert-danger">{{diffController.error}}</span>
-        <hr/>
-        <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame">No changes in this version.</span>
-        <div ng-if="!diffController.isOldNewVersionDataSame" class="table"
-             ng-repeat="rowNumbe in diffController.newVersionData.length | range : 0">
-            <table ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])" class="table">
-                <thead>
-                <tr>
-                    <th>Row Number</th>
-                    <th ng-repeat="(key, value) in ::diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{value}}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{{ $index+1 }}</td>
-                    <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{ diffController.oldVersionData[rowNumbe][key] || '-' }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ $index+1 }}</td>
-                    <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{ diffController.newVersionData[rowNumbe][key] || '-' }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])" />
+            <span class="alert-danger">{{diffController.error}}</span>
+            <hr/>
+            <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame && !diffController.isShowingDiff">No changes in this version.</span>
+            <span style="position: absolute; left: 50%;" us-spinner="{radius:30, width:8, length: 16}" spinner-key="loadingSpin"></span>
+
+            <div ng-if="!diffController.isOldNewVersionDataSame" class="table"
+                 ng-repeat="rowNumbe in diffController.newVersionData.length | range : 0">
+                <table ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"
+                       class="table">
+                    <thead>
+                    <tr>
+                        <th>Row Number</th>
+                        <th ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{value}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ $index+1 }}</td>
+                        <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{ diffController.oldVersionData[rowNumbe][key] || '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ $index+1 }}</td>
+                        <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{ diffController.newVersionData[rowNumbe][key] || '-' }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"/>
+            </div>
         </div>
     </div>
 </div>
-
-</div>
 <script type="application/javascript" src="../node_modules/angular/angular.js"></script>
+<script type="application/javascript" src="../node_modules/angular-spinner/angular-spinner.js"></script>
+<script type="application/javascript" src="../node_modules/spin/spin.js"></script>
+<script type="application/javascript" src="../assets/js/globals.js"></script>
 <script type="application/javascript" src="DiffController.js"></script>
 </body>
 </html>

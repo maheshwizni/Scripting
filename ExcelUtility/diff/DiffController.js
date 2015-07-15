@@ -1,11 +1,11 @@
 /**
  * Created by Amit Thakkar on 09/07/15.
  */
-(function (ng) {
-    var diffModule = ng.module('diff', []);
+(function (ng, w) {
+    var diffModule = ng.module('diff', ['angularSpinner']);
     diffModule.filter('range', function () {
         return function (max, min) {
-            if(min == undefined) {
+            if (min == undefined) {
                 min = 1;
             }
             var versions = [];
@@ -17,7 +17,7 @@
         };
     });
     diffModule.service('DiffService', ['$http', function ($http) {
-        var URL = 'http://104.236.140.70:9000/site';
+        var URL = w.baseUrl;
         this.getSheetNameAndLatestVersion = function () {
             return $http.get(URL + '/sheetNameAndVersion');
         };
@@ -25,30 +25,41 @@
             return $http.get(URL + '/' + sheetName + '/' + version);
         };
     }]);
-    diffModule.controller('DiffController', ['DiffService', function (DiffService) {
+    diffModule.controller('DiffController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
         var diffController = this;
+        usSpinnerService.spin('loadingSpin');
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
+                usSpinnerService.stop('loadingSpin');
                 diffController.sheetNameAndLatestVersion = response;
             }).error(function () {
                 diffController.sheetNameAndLatestVersion = [];
             });
         var oldData = undefined;
         var newData = undefined;
+        var showBothVersionDiff = function() {
+            if(oldData && newData) {
+                diffController.isOldNewVersionDataSame = oldData == newData;
+                usSpinnerService.stop('loadingSpin');
+                diffController.isShowingDiff = false;
+            }
+        };
         diffController.showDiff = function () {
             if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
+                usSpinnerService.spin('loadingSpin');
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
                 diffController.newVersionData = undefined;
                 diffController.isOldNewVersionDataSame = false;
+                diffController.error = undefined;
                 oldData = undefined;
                 newData = undefined;
-                if(diffController.selectedToVersion != 1) {
+                if (diffController.selectedToVersion != 1) {
                     DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
                         .success(function (response) {
                             oldData = response.metaData;
                             diffController.newVersionData = JSON.parse(oldData);
-                            diffController.isOldNewVersionDataSame = oldData == newData;
+                            showBothVersionDiff();
                         })
                         .error(function () {
                             diffController.oldVersionData = undefined;
@@ -58,7 +69,7 @@
                     .success(function (response) {
                         newData = response.metaData;
                         diffController.oldVersionData = JSON.parse(newData);
-                        diffController.isOldNewVersionDataSame = oldData == newData;
+                        showBothVersionDiff();
                     })
                     .error(function () {
                         diffController.newVersionData = undefined;
@@ -71,8 +82,8 @@
                 diffController.error = 'Please Select From Version Number';
             }
         };
-        diffController.isSameRow = function(oldRow, newRow) {
+        diffController.isSameRow = function (oldRow, newRow) {
             return ng.equals(oldRow, newRow);
         };
     }]);
-})(angular);
+})(angular, window);
