@@ -2,10 +2,10 @@
  * Created by Amit Thakkar on 09/07/15.
  */
 (function (ng, w) {
-    var diffModule = ng.module('diff', []);
+    var diffModule = ng.module('diff', ['angularSpinner']);
     diffModule.filter('range', function () {
         return function (max, min) {
-            if(min == undefined) {
+            if (min == undefined) {
                 min = 1;
             }
             var versions = [];
@@ -25,7 +25,7 @@
             return $http.get(URL + '/' + sheetName + '/' + version);
         };
     }]);
-    diffModule.controller('DiffController', ['DiffService', function (DiffService) {
+    diffModule.controller('DiffController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
         var diffController = this;
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
@@ -36,6 +36,7 @@
         var oldData = undefined;
         var newData = undefined;
         diffController.showDiff = function () {
+            usSpinnerService.spin('loadingSpin');
             if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
@@ -43,7 +44,7 @@
                 diffController.isOldNewVersionDataSame = false;
                 oldData = undefined;
                 newData = undefined;
-                if(diffController.selectedToVersion != 1) {
+                if (diffController.selectedToVersion != 1) {
                     DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
                         .success(function (response) {
                             oldData = response.metaData;
@@ -71,7 +72,7 @@
                 diffController.error = 'Please Select From Version Number';
             }
         };
-        diffController.isSameRow = function(oldRow, newRow) {
+        diffController.isSameRow = function (oldRow, newRow) {
             return ng.equals(oldRow, newRow);
         };
     }]);
