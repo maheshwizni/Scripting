@@ -42,6 +42,7 @@
                 diffController.isOldNewVersionDataSame = oldData == newData;
                 usSpinnerService.stop('loadingSpin');
                 diffController.isShowingDiff = false;
+                diffController.newOldSchema = ng.merge(diffController.newVersionData[0], diffController.oldVersionData[0]);
             }
         };
         diffController.showDiff = function () {
