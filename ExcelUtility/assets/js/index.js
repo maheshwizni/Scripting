@@ -1,8 +1,8 @@
 /**
  * Created by WizniDev on 7/7/2015.
  */
-/* GLOBALS */
-var baseUrl = 'http://104.236.140.70:9000/site';
+/*/!* GLOBALS *!/
+var baseUrl = 'http://104.236.140.70:9000/site';*/
 
 $(document).ready(function() {
     window.location.href="home.html";

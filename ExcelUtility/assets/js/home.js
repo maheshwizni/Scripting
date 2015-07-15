@@ -77,18 +77,26 @@ function buildTable(tableName, cols, json, columnsAdded){
             console.log(selectedVal);
             debugger;
             // Clear Grouping First
-            var oSettings = table.dataTableSettings[0];
-            for (var f = 0; f < oSettings.aoDrawCallback.length; f++) {
-                if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
-                    oSettings.aoDrawCallback.splice(f, 1);
-                    break;
+            for(var i=0; i<table.dataTableSettings.length;i++) {
+                var oSettings = table.dataTableSettings[i];
+                for (var f = 0; f < oSettings.aoDrawCallback.length; f++) {
+                    if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
+                        oSettings.aoDrawCallback.splice(f, 1);
+                        break;
+                    }
                 }
+                oSettings.aaSortingFixed = null;
             }
-            oSettings.aaSortingFixed = null;
             if(selectedVal === 'NONE'){
                 // Clear Table and Redraw
+                var data = [];
+                switch(tableName){
+                    case "siteTbl": data = sites;break;
+                    case "sysTbl": data = systems;break;
+                    case "assetTbl": data = assets;break;
+                };
                 table.fnClearTable();
-                table.fnAddData(sites);
+                table.fnAddData(data);
             }else {
                 table.rowGrouping({
                     //bExpandableGrouping: true,GroupingColumnIndex:5,bHideGroupingColumn: false,asExpandedGroups:[]
@@ -115,6 +123,7 @@ function buildTable(tableName, cols, json, columnsAdded){
                 // This row is already open - close it
                 table.api().row(tr).child('Dummy Content').hide();
                 tr.removeClass('shown');
+                oldTr = null;
             }
             else {
                 // Open this row
@@ -131,9 +140,11 @@ function buildTable(tableName, cols, json, columnsAdded){
         });
     }
 };
-
+var tblCsIdx = 0;
+var tblCaIdx = 0;
 function formatCyberSystems (data) {
     // `d` is the original data object for the row
+    tblCsIdx++;
     var systemNames = [];
     var systemsJson = [];
     var siteName = data["Site Name"];
@@ -148,7 +159,7 @@ function formatCyberSystems (data) {
         });
     });
 
-    var oTable = $('<table id="'+ siteName.replace(/ /g,'') +'" class="display" width="100%"></table>').dataTable({
+    var oTable = $('<table id="'+ siteName.replace(/ /g,'') + tblCsIdx +'" class="display" width="100%"></table>').dataTable({
         columns: systemsPrimaryCols, //systemCols.length > defaultLength? systemCols.slice(0,defaultLength): systemCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
@@ -167,13 +178,14 @@ function formatCyberSystems (data) {
 
 function formatCyberAssets (data) {
     // `d` is the original data object for the row
+    tblCaIdx++;
     var relevantAssets = [];
     var siteName = data["Site Name"];
     $.each(assets, function (index, value) {
         if ($.trim(assets[index]["Site Name"]) === $.trim(siteName))
             relevantAssets.push(assets[index]);
     });
-    var oTable = $('<table id="'+ siteName.replace(/ /g,'') +'" class="display" width="100%"></table>').dataTable({
+    var oTable = $('<table id="'+ siteName.replace(/ /g,'') + tblCaIdx +'" class="display" width="100%"></table>').dataTable({
         columns: assetsPrimaryCols, //assetCols.length > defaultLength? assetCols.slice(0,defaultLength): assetCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
