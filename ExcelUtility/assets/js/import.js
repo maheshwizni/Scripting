@@ -92,6 +92,9 @@ var jsonColsData;
 var isInitiaized;
 var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   //$('#footnote').hide();
+  var target = document.getElementById('foo');
+  var spinner = new Spinner().spin();
+  target.appendChild(spinner.el);
   $('#divSave').show();
   $('#hot').show();
   $('#configureGroups').show();
@@ -151,7 +154,7 @@ debugger;
     includeSelectAllOption: false
   });
   $('#DescModal').modal("show");
-
+  spinner.stop();
 }
 
 
