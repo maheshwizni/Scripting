@@ -130,6 +130,48 @@ var DropSheet = function DropSheet(opts) {
 		}
 	}
 
+	function handleFileSelect(e) {
+		//e.stopPropagation();
+		//e.preventDefault();
+		//if(pending) return opts.errors.pending();
+		var files = e.target.files;
+		var i,f;
+		for (i = 0, f = files[i]; i != files.length; ++i) {
+			var reader = new FileReader();
+			var name = f.name;
+			reader.onload = function(e) {
+				var data = e.target.result;
+				var wb, arr, xls;
+				var readtype = {type: rABS ? 'binary' : 'base64' };
+				if(!rABS) {
+					arr = fixdata(data);
+					data = btoa(arr);
+				}
+				xls = [0xd0, 0x3c].indexOf(data.charCodeAt(0)) > -1;
+				if(!xls && arr) xls = [0xd0, 0x3c].indexOf(arr[0].charCodeAt(0)) > -1;
+				if(rABS && !xls && data.charCodeAt(0) !== 0x50)
+					return opts.errors.badfile();
+				function doit() {
+					try {
+						if(useworker) { sheetjsw(data, process_wb, readtype, xls); return; }
+						if(xls) {
+							wb = XLS.read(data, readtype);
+							process_wb(wb, 'XLS');
+						} else {
+							wb = XLSX.read(data, readtype);
+							process_wb(wb, 'XLSX');
+						}
+					} catch(e) { opts.errors.failed(e); }
+				}
+
+				if(e.target.result.length > 500000) opts.errors.large(e.target.result.length, function(e) { if(e) doit(); });
+				else { doit(); }
+			};
+			if(rABS) reader.readAsBinaryString(f);
+			else reader.readAsArrayBuffer(f);
+		}
+	}
+
 	function handleDragover(e) {
 		e.stopPropagation();
 		e.preventDefault();
@@ -140,6 +182,9 @@ var DropSheet = function DropSheet(opts) {
 		opts.drop.addEventListener('dragenter', handleDragover, false);
 		opts.drop.addEventListener('dragover', handleDragover, false);
 		opts.drop.addEventListener('drop', handleDrop, false);
+	}
+	if(opts.fileSelect.addEventListener) {
+		opts.fileSelect.addEventListener('change', handleFileSelect, false);
 	}
 
 };
