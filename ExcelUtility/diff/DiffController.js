@@ -1,7 +1,7 @@
 /**
  * Created by Amit Thakkar on 09/07/15.
  */
-(function (ng) {
+(function (ng, w) {
     var diffModule = ng.module('diff', []);
     diffModule.filter('range', function () {
         return function (max, min) {
@@ -17,7 +17,7 @@
         };
     });
     diffModule.service('DiffService', ['$http', function ($http) {
-        var URL = 'http://104.236.140.70:9000/site';
+        var URL = w.baseUrl;
         this.getSheetNameAndLatestVersion = function () {
             return $http.get(URL + '/sheetNameAndVersion');
         };
@@ -75,4 +75,4 @@
             return ng.equals(oldRow, newRow);
         };
     }]);
-})(angular);
+})(angular, window);
