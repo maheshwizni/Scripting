@@ -96,6 +96,9 @@ $(document).on('change', '#version', function(e){
         return;
         var cols = json[0];
         if(cols) {
+            var target = document.getElementById('foo');
+            var spinner = new Spinner().spin();
+            target.appendChild(spinner.el);
             $('#hot').show();
             $("#hot").handsontable({
                 data: json,
@@ -118,8 +121,13 @@ $(document).on('change', '#version', function(e){
                     return availableWidth;
                 },
                 height: function () { return availableHeight; },
-                stretchH: 'all'
+                stretchH: 'all',
+                afterRender: function(){
+                console.log('Draw');
+                    spinner.stop();
+                }
             });
+            //spinner.stop();
         }
     })
         .error(function(xhr, desc, error){
