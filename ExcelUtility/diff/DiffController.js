@@ -59,7 +59,7 @@
                 diffController.error = undefined;
                 oldData = undefined;
                 newData = undefined;
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
+                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
                     .success(function (response) {
                         oldData = response.metaData;
                         showBothVersionDiff();
@@ -67,7 +67,7 @@
                     .error(function () {
                         diffController.oldVersionData = undefined;
                     });
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
+                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
                     .success(function (response) {
                         newData = response.metaData;
                         showBothVersionDiff();
