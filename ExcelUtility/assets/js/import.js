@@ -79,7 +79,7 @@ var make_buttons = function(sheetnames, cb) {
 };*/
 
 $(document).on('click','#btndownloadfile', function(e){
-  debugger;
+  //debugger;
   e.preventDefault();
   var remoteUrl = 'http://spf2010.wizni.com/Shared%20Docs/2-Sites.xlsx';
   $.get(remoteUrl, function(data){
@@ -110,16 +110,18 @@ var _onsheet = function(json, cols, sheetnames, select_sheet_cb) {
   /* showtime! */
 selectedSheet = sheetnames[selectedIdx || 0];
   $('#sheet').text(selectedSheet);
-debugger;
+//debugger;
   console.log("Data:" + json);
   var colsData = [];
 
   cols.forEach(function(k) {
-    colsData.push({
-      title: k,
-      data: k
-      //optionally do some type detection here for render function
-    });
+    if(k && k !== 'undefined') {
+      colsData.push({
+        title: k,
+        data: k
+        //optionally do some type detection here for render function
+      });
+    }
   });
 
   oTable = $('#' + selectedSheet.replace(/ /g,'')).DataTable({
@@ -131,6 +133,7 @@ debugger;
 
   if(isInitiaized) {
     $("#colGroupPrimary").multiselect("destroy");
+    $("#colGroupPrimarySAP").multiselect("destroy");
     //$('#colGroupPrimary').multiselect('refresh');
   }
   $('#modalTitle').text(selectedSheet);
@@ -145,13 +148,28 @@ debugger;
     });
   });*/
   $('#colGroupPrimary option').remove();
-  debugger;
+  $('#colGroupPrimarySAP option').remove();
+  //debugger;
   $.each(colsData, function(index, value){
-    $('#colGroupPrimary').append(new Option(value.title, index));
+    $('<option/>', {
+      text: value.title,
+      value: value.title
+      /*selected: 'selected'*/
+    }).appendTo($('#colGroupPrimary'));
+    //$('#colGroupPrimary').append(new Option(value.title, index));
+    $('<option/>', {
+      text: value.title,
+      value: value.title
+      /*selected: 'selected'*/
+    }).appendTo($('#colGroupPrimarySAP'));
   });
   //$('#modalBody').html(html);
   isInitiaized = true;
+  $('#modalBody div.additionalDiv').remove();
   $('#colGroupPrimary').multiselect({
+    includeSelectAllOption: false
+  });
+  $('#colGroupPrimarySAP').multiselect({
     includeSelectAllOption: false
   });
   $('#DescModal').modal("show");
@@ -216,15 +234,51 @@ $(document).on('click', '#configureGroups', function(e){
   });*/
   $('#DescModal').modal("show");
 });
+var groupIndex = 0;
+$(document).on('click', '#addNewGroup', function(e){
+  e.preventDefault();
+  var html = '<div class="row additionalDiv" data-val="Group' + groupIndex + '"><div class="col-md-2"><input class="form-control" id="Group'+ groupIndex + '" type="text" class="input-xlarge" placeholder="Enter Group Name" value=""></div><div class="col-md-4"><select id="colGroup' + groupIndex + '" class="form-control" multiple="multiple"></select></div></div>';
+  $('#modalBody').append(html);
+
+  var data = [].concat(jsonData);
+   var keys = Object.keys(data.shift());
+   var cols = [];
+   keys.forEach(function(k) {
+     if(k && k !== 'undefined') {
+       cols.push({
+         title: k,
+         data: k
+         //optionally do some type detection here for render function
+       });
+     }
+   });
+
+  $('#colGroup' + groupIndex + ' option').remove();
+  //debugger;
+  $.each(cols, function(index, value){
+    $('<option/>', {
+      text: value.title,
+      value: value.title
+      /*selected: 'selected'*/
+    }).appendTo($('#colGroup' + groupIndex));
+    //$('#colGroupPrimary').append(new Option(value.title, index));
+  });
+  //$('#modalBody').html(html);
+  isInitiaized = true;
+  $('#colGroup' + groupIndex).multiselect({
+    includeSelectAllOption: false
+  });
+  groupIndex++;
+});
 
 $(document).on('click', '#btnConfigureGroups', function(e){
-debugger;
+//debugger;
 var sel = $('#colGroupPrimary').val();
   if(!sel){
     $('#DescModal').modal("show");
     return;
   }
-  var data = [].concat(jsonData);
+  /*var data = [].concat(jsonData);
   var keys = Object.keys(data.shift());
   var cols = [];
   keys.forEach(function(k) {
@@ -233,17 +287,36 @@ var sel = $('#colGroupPrimary').val();
       data: k
       //optionally do some type detection here for render function
     });
-  });
-  var selectedCols = [];
-  $.each(sel, function(idx, val){
+  });*/
+  var selectedCols = sel;
+  /*$.each(sel, function(idx, val){
     $.each(cols, function(index, value){
       if(val == index){
         selectedCols.push(value.title);
       }
     })
+  });*/
+  var isSuccess=true;
+  var selection = {Groups: []};
+  $.each($('#modalBody>div.row'), function(idx,val){
+    $this = $(this);
+    var $group = $('#' + $this.data('val'));
+    var $cols = $('#col' + $this.data('val'));
+    if($group.val() === ''){
+      isSuccess=false;
+      return;
+    }
+    if(!$cols.val()){
+      isSuccess=false;
+      return;
+    }
+    selection.Groups.push({Name: $group.val(), Cols: $cols.val()});
   });
-  jsonColsData = {Primary: selectedCols};
-  $('#DescModal').modal("hide");
+  if(isSuccess) {
+    jsonColsData = {Primary:selectedCols};
+    console.log(jsonColsData);
+    $('#DescModal').modal("hide");
+  }
 });
 
 /** Drop it like it's hot **/

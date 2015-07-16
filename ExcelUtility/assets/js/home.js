@@ -33,36 +33,37 @@ function loadAssetsData(cols, json, columnsAdded){
 
 function buildTable(tableName, cols, json, columnsAdded){
     //var columnsAdded = cols.length > defaultLength? cols.slice(0,defaultLength): cols;
-
+    var columnsAdded2 = [].concat(columnsAdded);
+    columnsAdded2.push({data: '', title: ''});
     var table = $('#'+tableName).dataTable({
-        columns: columnsAdded,
+        columns: columnsAdded2,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
             if(tableName === 'siteTbl'){
                 //If Sites, make the first column as template for lookup
                 $('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>');
                 if(data["Site Name"]){
-                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Detail...</a></div>');
+                    $('td', row).eq(columnsAdded2.length-1).html('<div class="more-details" style="width:250px;"><a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                 }
             }
             if(tableName === 'sysTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
                 if(data["Cyber System"]){
-                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-key="Cyber System" data-title="'+ data["Cyber System"] +'" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
+                    $('td', row).eq(columnsAdded2.length-1).html('<div class="more-details" style="width:250px;"><a class="moreDetail btn btn-success" data-key="Cyber System" data-title="'+ data["Cyber System"] +'" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                 }
             }
             if(tableName === 'assetTbl'){
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
                 if(data["Cyber Asset Name or Unique ID"]){
-                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details">' + (data[columnsAdded[columnsAdded.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
+                    $('td', row).eq(columnsAdded2.length-1).html('<div class="more-details" style="width:250px;"><a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                 }
             }
         }
     });
     table.fnAddData(json);
-
+    $('#' + tableName + '_filter').append('<a href="javascript:void(0);" class="clearFilter" data-val="' + tableName + '">Clear</a>');
     var groupBy = $('#groupBy' + tableName);
     if(groupBy){
         $('#groupBy' + tableName + ' option').remove();
@@ -75,7 +76,7 @@ function buildTable(tableName, cols, json, columnsAdded){
             $this = $(this);
             var selectedVal = $('#groupBy' + tableName).val();
             console.log(selectedVal);
-            debugger;
+            //debugger;
             // Clear Grouping First
             for(var i=0; i<table.dataTableSettings.length;i++) {
                 var oSettings = table.dataTableSettings[i];
@@ -158,15 +159,16 @@ function formatCyberSystems (data) {
                 systemsJson.push(systems[index]);
         });
     });
-
+    var columnsAdded = [].concat(systemsPrimaryCols);
+    columnsAdded.push({data: '', title: ''});
     var oTable = $('<table id="'+ siteName.replace(/ /g,'') + tblCsIdx +'" class="display" width="100%"></table>').dataTable({
-        columns: systemsPrimaryCols, //systemCols.length > defaultLength? systemCols.slice(0,defaultLength): systemCols,
+        columns: columnsAdded, //systemCols.length > defaultLength? systemCols.slice(0,defaultLength): systemCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
                         //If Sites, make the first column as template for lookup
                         //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
                         if(data["Cyber System"]){
-                            $('td', row).eq(systemsPrimaryCols.length-1).html('<div class="more-details">' + (data[systemsPrimaryCols[systemsPrimaryCols.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber System"] +'" data-key="Cyber System" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Detail...</a></div>');
+                            $('td', row).eq(columnsAdded.length-1).html('<div class="more-details" style="width:250px;"><a class="moreDetail btn btn-success" data-title="'+ data["Cyber System"] +'" data-key="Cyber System" data-val="' + data["Cyber System"] + '" data-selector="systems" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                         }
         }
     });
@@ -185,14 +187,16 @@ function formatCyberAssets (data) {
         if ($.trim(assets[index]["Site Name"]) === $.trim(siteName))
             relevantAssets.push(assets[index]);
     });
+    var columnsAdded = [].concat(assetsPrimaryCols);
+    columnsAdded.push({data: '', title: ''});
     var oTable = $('<table id="'+ siteName.replace(/ /g,'') + tblCaIdx +'" class="display" width="100%"></table>').dataTable({
-        columns: assetsPrimaryCols, //assetCols.length > defaultLength? assetCols.slice(0,defaultLength): assetCols,
+        columns: columnsAdded, //assetCols.length > defaultLength? assetCols.slice(0,defaultLength): assetCols,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
                 //If Sites, make the first column as template for lookup
                 //$('td', row).eq(0).html('<div class="details-control">' + data["Cyber System"] + '</div>');
                 if(data["Cyber Asset Name or Unique ID"]){
-                    $('td', row).eq(assetsPrimaryCols.length-1).html('<div class="more-details">' + (data[assetsPrimaryCols[assetsPrimaryCols.length-1].data] || '--') + '&nbsp;&nbsp;<a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Detail...</a></div>');
+                    $('td', row).eq(columnsAdded.length-1).html('<div class="more-details"  style="width:250px;"><a class="moreDetail btn btn-success" data-title="'+ data["Cyber Asset Name or Unique ID"] +'" data-key="Cyber Asset Name or Unique ID" data-val="' + data["Cyber Asset Name or Unique ID"] + '" data-selector="assets" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                 }
         }
     });
@@ -203,7 +207,7 @@ function formatCyberAssets (data) {
 }
 
 $(document).on('click', '.viewasset', function(e){
-    debugger;
+    //debugger;
     e.preventDefault();
     var $this = $(this);
     console.log($this.data('val'));
@@ -213,7 +217,7 @@ $(document).on('click', '.viewasset', function(e){
 });
 
 $(document).on('click', '.viewsystems', function(e){
-    debugger;
+    //debugger;
     e.preventDefault();
     var $this = $(this);
     console.log($this.data('val'));
@@ -276,6 +280,45 @@ $(document).on('click', 'a.moreDetail', function (e) {
     $('#DescModal').modal("show");
 });
 
+$(document).on('click', 'a.moreDetailSAP', function (e) {
+    e.preventDefault();
+    /*var $this = $(this);
+    var title = $this.data('title');
+    var val = $this.data('val');
+    var selector = $this.data('selector');
+    var obj;
+    switch (selector){
+        case 'sites': obj = sites;break;
+        case 'systems': obj = systems;break;
+        case 'assets': obj = assets;break;
+    };
+    var datakey = $this.data('key');
+    $('#modalTitle').text(title);
+    var html = $('<div/>');
+    //debugger;
+    $.each(obj, function(index,value){
+        if($.trim(obj[index][datakey]) === $.trim(val)){
+            var result = obj[index];
+            var parentRow;
+            var index = 0;
+            $.each(result, function(k, v) {
+                //display the key and value pair
+                var divKey = $('<div class="col-sm-3 boldContent"/>').text(k);
+                var divVal = $('<div class="col-sm-3"/>').text(v);
+                if(index%2 === 0){
+                    parentRow = $('<div class="row"/>');
+                }
+                parentRow.append(divKey);
+                parentRow.append(divVal);
+                html.append(parentRow);
+                index++;
+            });
+        }
+    });
+    $('#modalBodySAP').html(html);*/
+    $('#DescModalSAP').modal("show");
+});
+
 $(document).on('click', '.clearFilter', function(e){
     e.preventDefault();
     var $this = $(this);
@@ -300,7 +343,7 @@ function loadData(sheetName, cb){
             if(data[index].sheetName === sheetName)
                 maxIndex = data[index].version;
         });
-        debugger;
+        //debugger;
         $.get(baseUrl + '/' + sheetName + '/' + maxIndex , function(data, status){
             console.log("Data: " + data + "\nStatus: " + status);
             var json = JSON.parse(data.metaData); //TODO: Get data from MongoDB
