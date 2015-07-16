@@ -17,7 +17,7 @@
         div.details-control {
             background: url('assets/img/details_open.png') no-repeat right;
             cursor: pointer;
-            width:150px;
+            width:200px;
         }
         tr.shown div.details-control {
             background: url('assets/img/details_close.png') no-repeat right;
@@ -92,15 +92,10 @@
         <div class="tab-pane active" id="Site">
             <br>
             <div class="row">
-                <div class="col-md-2">
-                    <a href="javascript:void(0);" class="clearFilter" data-val="siteTbl">Clear Filter</a>
-                </div>
-                <div class="col-md-5">
-                    <label class="col-md-3 control-label">Group By</label>
-                    <div class="col-md-9 selectContainer">
-                        <select class="form-control" id="groupBysiteTbl">
-                        </select>
-                    </div>
+                <!--<label class="col-md-1 control-label">Group By</label>-->
+                <div class="col-md-5 selectContainer">
+                    <label class="control-label">Group By:</label><select class="form-control" id="groupBysiteTbl">
+                    </select>
                 </div>
             </div>
             <br>
@@ -113,16 +108,16 @@
         <div class="tab-pane" id="CyberSystem">
             <br>
             <div class="row">
-                <div class="col-md-2">
+               <!-- <div class="col-md-2">
                     <a href="javascript:void(0);" class="clearFilter" data-val="sysTbl">Clear Filter</a>
                 </div>
-                <div class="col-md-5">
-                    <label class="col-md-3 control-label">Group By</label>
-                    <div class="col-md-9 selectContainer">
-                        <select class="form-control" id="groupBysysTbl">
+                <div class="col-md-5">-->
+                    <!--<label class="col-md-1 control-label">Group By</label>-->
+                    <div class="col-md-5 selectContainer">
+                        <label class="control-label">Group By:</label><select class="form-control" id="groupBysysTbl">
                         </select>
                     </div>
-                </div>
+                <!--</div>-->
             </div>
             <br>
             <div class="row">
@@ -133,16 +128,16 @@
         <div class="tab-pane" id="CyberAsset">
             <br>
             <div class="row">
-                <div class="col-md-2">
+                <!--<div class="col-md-2">
                     <a href="javascript:void(0);" class="clearFilter" data-val="assetTbl">Clear Filter</a>
                 </div>
-                <div class="col-md-5">
-                    <label class="col-md-3 control-label">Group By</label>
-                    <div class="col-md-9 selectContainer">
-                        <select class="form-control" id="groupByassetTbl">
+                <div class="col-md-5">-->
+                    <!--<label class="col-md-1 control-label">Group By</label>-->
+                    <div class="col-md-5 selectContainer">
+                        <label class="control-label">Group By:</label><select class="form-control" id="groupByassetTbl">
                         </select>
                     </div>
-                </div>
+                <!--</div>-->
             </div>
             <br>
             <div class="row">
@@ -171,6 +166,27 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+    <div class="modal fade" id="DescModalSAP" role="dialog">
+        <div class="modal-dialog custom-class">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="modalTitleSAP">SAP Details</h3>
+                </div>
+                <div class="modal-body" id="modalBodySAP">
+                    <div class="row">
+                        <div class="col-md-9">SAP details added here</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary " data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </div>
 <script src="assets/js/globals.js"></script>
 <script src="assets/js/home.js"></script>
