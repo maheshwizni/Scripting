@@ -37,6 +37,7 @@ function buildTable(tableName, cols, json, columnsAdded){
     columnsAdded2.push({data: '', title: ''});
     var table = $('#'+tableName).dataTable({
         columns: columnsAdded2,
+        bLengthChange: false,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
             if(tableName === 'siteTbl'){
@@ -109,6 +110,13 @@ function buildTable(tableName, cols, json, columnsAdded){
                     asExpandedGroups: [],
                     fnOnGrouped: function() {
                         console.log('Rows are regrouped!');
+                    },
+                    fnOnGroupCompleted: function( oGroup ) {
+                        var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
+                        $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
+                    },
+                    fnGroupLabelFormat: function(label, oGroup) {
+                        return " <i>"+ label + "</i>";
                     }
                 });
             }
