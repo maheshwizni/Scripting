@@ -130,52 +130,84 @@ selectedSheet = sheetnames[selectedIdx || 0];
   });
 
   oTable.rows.add(json).draw();
+  loadGroupMetaData(selectedSheet, jsonData, colsData);
 
-  if(isInitiaized) {
-    $("#colGroupPrimary").multiselect("destroy");
-    $("#colGroupPrimarySAP").multiselect("destroy");
-    //$('#colGroupPrimary').multiselect('refresh');
-  }
-  $('#modalTitle').text(selectedSheet);
-  var data = [].concat(jsonData);
-  var keys = Object.keys(data.shift());
-  /*var cols2 = [];
-  keys.forEach(function(k) {
-    cols.push({
-      title: k,
-      data: k
-      //optionally do some type detection here for render function
-    });
-  });*/
-  $('#colGroupPrimary option').remove();
-  $('#colGroupPrimarySAP option').remove();
-  //debugger;
-  $.each(colsData, function(index, value){
-    $('<option/>', {
-      text: value.title,
-      value: value.title
-      /*selected: 'selected'*/
-    }).appendTo($('#colGroupPrimary'));
-    //$('#colGroupPrimary').append(new Option(value.title, index));
-    $('<option/>', {
-      text: value.title,
-      value: value.title
-      /*selected: 'selected'*/
-    }).appendTo($('#colGroupPrimarySAP'));
-  });
-  //$('#modalBody').html(html);
-  isInitiaized = true;
-  $('#modalBody div.additionalDiv').remove();
-  $('#colGroupPrimary').multiselect({
-    includeSelectAllOption: false
-  });
-  $('#colGroupPrimarySAP').multiselect({
-    includeSelectAllOption: false
-  });
-  $('#DescModal').modal("show");
   spinner.stop();
 }
 
+function getSimilifiedSheetName(sheetName){
+  var simplifiedSelectedSheet = sheetName;
+  if(selectedSheet.indexOf('Site Detail') > -1)
+    simplifiedSelectedSheet = 'Site';
+  if(selectedSheet.indexOf('Cyber System') > -1)
+    simplifiedSelectedSheet = 'CyberSystem';
+  if(selectedSheet.indexOf('Cyber Asset') > -1)
+    simplifiedSelectedSheet = 'CyberAsset';
+
+  return simplifiedSelectedSheet;
+}
+
+function loadGroupMetaData(sheetName, jsonData, colsData){
+  var simplifiedSelectedSheet = getSimilifiedSheetName(sheetName);
+
+  $.get(baseUrl + '/sheetNameAndVersion', function(data, status) {
+    var maxIndex = 1;
+    $.each(data, function(index){
+      if(data[index].sheetName === simplifiedSelectedSheet)
+        maxIndex = data[index].version;
+    });
+    $.get(baseUrl + '/' + simplifiedSelectedSheet + '/' + maxIndex , function(data2, status) {
+      var groupData;
+      if (data2.groupData)
+        groupData = JSON.parse(data2.groupData);
+      if(isInitiaized) {
+        $("#colGroupPrimary").multiselect("destroy");
+        $("#colGroupPrimarySAP").multiselect("destroy");
+        //$('#colGroupPrimary').multiselect('refresh');
+      }
+      $('#modalTitle').text(selectedSheet);
+      var datalocal = [].concat(jsonData);
+      var keys = Object.keys(datalocal.shift());
+
+      $('#colGroupPrimary option').remove();
+      $('#colGroupPrimarySAP option').remove();
+      //debugger;
+      $.each(colsData, function(index, value){
+        $('<option/>', {
+          text: value.title,
+          value: value.title
+          /*selected: 'selected'*/
+        }).appendTo($('#colGroupPrimary'));
+        //$('#colGroupPrimary').append(new Option(value.title, index));
+        $('<option/>', {
+          text: value.title,
+          value: value.title
+          /*selected: 'selected'*/
+        }).appendTo($('#colGroupPrimarySAP'));
+      });
+      //$('#modalBody').html(html);
+      isInitiaized = true;
+      $('#modalBody div.additionalDiv').remove();
+      var showDiv = false;
+      if(!groupData) {
+        showDiv=true;
+      }else{
+        $('#colGroupPrimary').val(groupData.Primary);
+        //$('#colGroupPrimary').multiselect('refresh');
+      }
+
+      $('#colGroupPrimary').multiselect({
+        includeSelectAllOption: false
+      });
+      $('#colGroupPrimarySAP').multiselect({
+        includeSelectAllOption: false
+      });
+      if(showDiv){
+        $('#DescModal').modal("show");
+      }
+    });
+  });
+};
 
 
 $(document).on('click', '#save', function(e){
@@ -183,13 +215,7 @@ $(document).on('click', '#save', function(e){
   console.log(JSON.stringify({header: data.shift()}));
   console.log(JSON.stringify({data: data}));
   var url = baseUrl;
-  var simplifiedSelectedSheet;
-  if(selectedSheet.indexOf('Site Detail') > -1)
-    simplifiedSelectedSheet = 'Site';
-  if(selectedSheet.indexOf('Cyber System') > -1)
-    simplifiedSelectedSheet = 'CyberSystem';
-  if(selectedSheet.indexOf('Cyber Asset') > -1)
-    simplifiedSelectedSheet = 'CyberAsset';
+  var simplifiedSelectedSheet = getSimilifiedSheetName(selectedSheet);
   console.log(simplifiedSelectedSheet);
   var postData = {sheetName: simplifiedSelectedSheet, metaData: JSON.stringify(jsonData), groupData: JSON.stringify(jsonColsData)};
   toastr.info('Upload in progress...');
