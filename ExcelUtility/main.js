@@ -14,11 +14,19 @@
         });
         $routeProvider.when('/home', {
             page: 'home',
-            title: 'Excel Import',
+            title: 'Home',
             templateUrl: 'components/home/_home.html',
             controller: 'HomeController',
             controllerAs: 'homeController',
             controllerUrl: 'components/home/home.controller.js'
+        });
+        $routeProvider.when('/import', {
+            page: 'import',
+            title: 'Excel Import',
+            templateUrl: 'components/import/_import.html',
+            controller: 'ImportController',
+            controllerAs: 'importController',
+            controllerUrl: 'components/import/import.controller.js'
         });
         $routeProvider.when('/version', {
             page: 'Version Administration',
