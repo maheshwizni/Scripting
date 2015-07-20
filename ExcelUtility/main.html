@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html ng-app="version">
+<html ng-app="version" ng-controller="MasterController as masterController">
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Version Controller of Excel Files</title>
+    <title>{{masterController.title}}</title>
     <link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
 </head>
-<body ng-controller="MasterController as masterController">
+<body>
 <nav role="navigation" class="navbar navbar-default">
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li ng-class="{active: masterController.page == 'home'}">
                 <a class="navmenu" href="#/home">Home</a>
             </li>
-            <li ng-class="{active: masterController.page == 'importExcel'}">
-                <a class="navmenu" href="#/importExcel">Import Excel</a>
+            <li ng-class="{active: masterController.page == 'import'}">
+                <a class="navmenu" href="#/import">Import Excel</a>
             </li>
             <li ng-class="{active: masterController.page == 'version'}">
                 <a class="navmenu" href="#/version"> Version Administration</a>
             </li>
             <li ng-class="{active: masterController.page == 'diff'}">
-                <a class="navmenu" href="#/diff">Difference in Different Versions</a>
+                <a class="navmenu" href="#/diff">Version History</a>
             </li>
         </ul>
     </div>
@@ -27,9 +27,12 @@
 <ng-view></ng-view>
 <script type="application/javascript" src="node_modules/angular/angular.js"></script>
 <script type="application/javascript" src="node_modules/angular-route/angular-route.js"></script>
+<script type="application/javascript" src="node_modules/spin/spin.js"></script>
+<script type="application/javascript" src="node_modules/angular-spinner/angular-spinner.js"></script>
 <script type="application/javascript" src="main.js"></script>
 <script type="application/javascript" src="components/diff/diff.controller.js"></script>
 <script type="application/javascript" src="components/home/home.controller.js"></script>
+<script type="application/javascript" src="components/import/import.controller.js"></script>
 <script type="application/javascript" src="components/version/version.controller.js"></script>
 </body>
 </html>
