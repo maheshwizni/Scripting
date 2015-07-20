@@ -37,11 +37,13 @@ function buildTable(tableName, cols, json, columnsAdded){
     columnsAdded2.push({data: '', title: ''});
     var table = $('#'+tableName).dataTable({
         columns: columnsAdded2,
+        bLengthChange: false,
         bPaginate: false,
         "createdRow": function ( row, data, index ) {
             if(tableName === 'siteTbl'){
                 //If Sites, make the first column as template for lookup
-                $('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>');
+                // Uncomment below line to enable grouping for Systems and Assets per Site
+                //$('td', row).eq(0).html('<div class="details-control">' + data["Site Name"] + '</div>');
                 if(data["Site Name"]){
                     $('td', row).eq(columnsAdded2.length-1).html('<div class="more-details" style="width:250px;"><a class="moreDetail btn btn-success" data-key="Site Name" data-title="'+ data["Site Name"] +'" data-val="' + data["Site Name"] + '" data-selector="sites" href="javascript:void(0);">More Details</a>&nbsp;&nbsp;<a href="javacript:void(0)" class="moreDetailSAP btn btn-success">SAP Details</a></div>');
                 }
@@ -109,6 +111,13 @@ function buildTable(tableName, cols, json, columnsAdded){
                     asExpandedGroups: [],
                     fnOnGrouped: function() {
                         console.log('Rows are regrouped!');
+                    },
+                    fnOnGroupCompleted: function( oGroup ) {
+                        var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
+                        $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
+                    },
+                    fnGroupLabelFormat: function(label, oGroup) {
+                        return " <i>"+ label + "</i>";
                     }
                 });
             }
@@ -366,8 +375,11 @@ function loadData(sheetName, cb){
             });
 
             var primaryCols = [];
-            if(groupData && groupData.Primary) {
-                groupData.Primary.forEach(function (k) {
+            if(groupData && groupData.Groups) {
+                var filter = groupData.Groups.filter(function(item){
+                    return item.Name === 'Primary';
+                });
+                filter[0].Cols.forEach(function (k) {
                     primaryCols.push({
                         title: k,
                         data: k
