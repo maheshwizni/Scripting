@@ -192,7 +192,34 @@ function loadGroupMetaData(sheetName, jsonData, colsData){
       if(!groupData) {
         showDiv=true;
       }else{
-        $('#colGroupPrimary').val(groupData.Primary);
+        //$('#colGroupPrimary').val(groupData.Primary);
+        if(groupData.Groups) {
+          $.each(groupData.Groups, function (idx, grp) {
+            if (grp.Name === 'Primary') {
+              $('#colGroupPrimary').val(grp.Cols);
+            } else {
+              var html = '<div class="row additionalDiv" data-val="Group' + groupIndex + '"><div class="col-md-2"><input class="form-control" id="Group' + groupIndex + '" type="text" class="input-xlarge" placeholder="Enter Group Name" value="' + grp.Name + '"></div><div class="col-md-4"><select id="colGroup' + groupIndex + '" class="form-control" multiple="multiple"></select></div></div>';
+              $('#modalBody').append(html);
+              $('#colGroup' + groupIndex + ' option').remove();
+              //debugger;
+              $.each(colsData, function (index, value) {
+                $('<option/>', {
+                  text: value.title,
+                  value: value.title
+                  /*selected: 'selected'*/
+                }).appendTo($('#colGroup' + groupIndex));
+                //$('#colGroupPrimary').append(new Option(value.title, index));
+              });
+              $('#colGroup' + groupIndex).val(grp.Cols);
+
+              $('#colGroup' + groupIndex).multiselect({
+                includeSelectAllOption: false
+              });
+
+              groupIndex++;
+            }
+          });
+        }
         //$('#colGroupPrimary').multiselect('refresh');
       }
 
@@ -208,7 +235,6 @@ function loadGroupMetaData(sheetName, jsonData, colsData){
     });
   });
 };
-
 
 $(document).on('click', '#save', function(e){
   var data = [].concat(jsonData);
@@ -233,31 +259,6 @@ $(document).on('click', '#save', function(e){
 $(document).on('click', '#configureGroups', function(e){
   e.preventDefault();
   console.log(selectedSheet);
-  /*if(isInitiaized) {
-    $("#colGroupPrimary").multiselect("destroy");
-    //$('#colGroupPrimary').multiselect('refresh');
-  }
-  $('#modalTitle').text(selectedSheet);
-  var data = [].concat(jsonData);
-  var keys = Object.keys(data.shift());
-  var cols = [];
-  keys.forEach(function(k) {
-    cols.push({
-      title: k,
-      data: k
-      //optionally do some type detection here for render function
-    });
-  });
-  $('#colGroupPrimary option').remove();
-  debugger;
-  $.each(cols, function(index, value){
-    $('#colGroupPrimary').append(new Option(value.title, index));
-  });
-  //$('#modalBody').html(html);
-  isInitiaized = true;
-  $('#colGroupPrimary').multiselect({
-    includeSelectAllOption: false
-  });*/
   $('#DescModal').modal("show");
 });
 var groupIndex = 0;
@@ -304,24 +305,7 @@ var sel = $('#colGroupPrimary').val();
     $('#DescModal').modal("show");
     return;
   }
-  /*var data = [].concat(jsonData);
-  var keys = Object.keys(data.shift());
-  var cols = [];
-  keys.forEach(function(k) {
-    cols.push({
-      title: k,
-      data: k
-      //optionally do some type detection here for render function
-    });
-  });*/
   var selectedCols = sel;
-  /*$.each(sel, function(idx, val){
-    $.each(cols, function(index, value){
-      if(val == index){
-        selectedCols.push(value.title);
-      }
-    })
-  });*/
   var isSuccess=true;
   var selection = {Groups: []};
   $.each($('#modalBody>div.row'), function(idx,val){
@@ -339,7 +323,8 @@ var sel = $('#colGroupPrimary').val();
     selection.Groups.push({Name: $group.val(), Cols: $cols.val()});
   });
   if(isSuccess) {
-    jsonColsData = {Primary:selectedCols};
+    //jsonColsData = {Primary:selectedCols};
+    jsonColsData = selection;
     console.log(jsonColsData);
     $('#DescModal').modal("hide");
   }

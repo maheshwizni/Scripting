@@ -375,8 +375,11 @@ function loadData(sheetName, cb){
             });
 
             var primaryCols = [];
-            if(groupData && groupData.Primary) {
-                groupData.Primary.forEach(function (k) {
+            if(groupData && groupData.Groups) {
+                var filter = groupData.Groups.filter(function(item){
+                    return item.Name === 'Primary';
+                });
+                filter[0].Cols.forEach(function (k) {
                     primaryCols.push({
                         title: k,
                         data: k

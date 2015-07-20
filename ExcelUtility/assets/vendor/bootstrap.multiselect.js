@@ -1340,7 +1340,10 @@
 
             for (var i = 0; i < options.length; i = i + 1) {
                 var option = options[i];
-                if (option.value === valueToCompare) {
+                /*if (option.value === valueToCompare) {
+                    return $(option);
+                }*/
+                if(option.value.replace(/(\r\n|\n|\r)/gm," ") === valueToCompare.replace(/(\r\n|\n|\r)/gm," ")){
                     return $(option);
                 }
             }
@@ -1359,7 +1362,7 @@
 
             for (var i = 0; i < checkboxes.length; i = i + 1) {
                 var checkbox = checkboxes[i];
-                if (checkbox.value === valueToCompare) {
+                if (checkbox.value.replace(/(\r\n|\n|\r)/gm," ") === valueToCompare.replace(/(\r\n|\n|\r)/gm," ")) {
                     return $(checkbox);
                 }
             }
