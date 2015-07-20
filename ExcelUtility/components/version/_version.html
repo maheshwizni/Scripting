@@ -1,22 +1,44 @@
 <div>
-    <h2>
-        Version Administration
-    </h2>
-    <a href="#/import">Upload another excel file</a><br><br>
-    <label>Select Sheet:</label>
-    <select ng-model="versionController.selectedSheet" class="form-control"
-            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in versionController.sheetNameAndLatestVersion">
-        <option value="">-- Choose Sheet Name --</option>
-    </select>
-    <label> Select Version:</label>
-    <select ng-model="versionController.selectedToVersion" class="form-control"
-            ng-options="n for n in versionController.selectedSheet.version | range">
-        <option value="">-- Choose Version --</option>
-    </select>
-    <input type="button" value="Show Data">
-    <table>
-        <tr>
-            <td></td>
-        </tr>
-    </table>
+    <div class="container" style="float:left">
+        <h2>
+            Version Administration
+        </h2>
+        <div class="row">
+            <div class="col-md-8">
+                <a href="#/import">Upload another excel file</a><br><br>
+                <label class="col-md-3 control-label">Sheet Name:</label>
+                <div class="col-md-9 selectContainer">
+                    <select ng-model="versionController.selectedSheet" class="form-control"
+                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in versionController.sheetNameAndLatestVersion">
+                        <option value="">-- Choose Sheet Name --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <label class="col-md-3 control-label"> Select Version:</label>
+                <div class="col-md-9 selectContainer">
+                    <select ng-model="versionController.selectedToVersion" class="form-control"
+                            ng-options="n for n in versionController.selectedSheet.version | range">
+                        <option value="">-- Choose Version --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <br>
+            <div class="col-md-8">
+                <label class="col-md-3 control-label">&nbsp;</label>
+                <div class="col-md-9">
+                    <input type="button" class="btn-lg btn-success pull-left" value="Show Data">
+                </div>
+            </div>
+        </div>
+        <table>
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+    </div>
 </div>
