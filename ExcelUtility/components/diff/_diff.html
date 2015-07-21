@@ -71,41 +71,42 @@
         <span class="alert-danger">{{diffController.error}}</span>
         <hr/>
         <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame && !diffController.isShowingDiff">No changes in this version.</span>
+        <div infinite-scroll="diffController.showMoreDiff()" infinite-scroll-distance="0">
+            <div ng-if="!diffController.isOldNewVersionDataSame" class="table"
+                 ng-repeat="rowNumbe in diffController.showMaxDiffRows | range : 0 : diffController.oldVersionData.length track by $index ">
+                <table ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"
+                       class="table">
+                    <thead>
+                    <tr>
+                        <th>Row Number</th>
+                        <th ng-repeat="(key, value) in diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{value}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ $index+1 }}</td>
+                        <td class="bg_oldValue" ng-repeat="(key, value) in diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{ diffController.oldVersionData[rowNumbe][key] || '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ $index+1 }}</td>
+                        <td class="bg_newValue" ng-repeat="(key, value) in diffController.newVersionData[0]"
+                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                            {{ diffController.newVersionData[rowNumbe][key] || '-' }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"/>
+            </div>
+        </div>
         <span style="position: absolute; left: 50%;" us-spinner="{radius:30, width:8, length: 16}"
               spinner-key="loadingSpin">
         </span>
-
-        <div ng-if="!diffController.isOldNewVersionDataSame" class="table"
-             ng-repeat="rowNumbe in diffController.oldVersionData.length | range : 0">
-            <table ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"
-                   class="table">
-                <thead>
-                <tr>
-                    <th>Row Number</th>
-                    <th ng-repeat="(key, value) in diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{value}}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{{ $index+1 }}</td>
-                    <td class="bg_oldValue" ng-repeat="(key, value) in diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{ diffController.oldVersionData[rowNumbe][key] || '-' }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ $index+1 }}</td>
-                    <td class="bg_newValue" ng-repeat="(key, value) in diffController.newVersionData[0]"
-                        ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                        {{ diffController.newVersionData[rowNumbe][key] || '-' }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"/>
-        </div>
     </div>
 </div>
