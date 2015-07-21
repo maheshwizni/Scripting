@@ -2,7 +2,7 @@
  * Created by Amit Thakkar on 13/07/15.
  */
 (function (ng) {
-    var versionModule = ng.module('version', ['ngRoute', 'angularSpinner']);
+    var versionModule = ng.module('version', ['ngRoute', 'angularSpinner', 'infinite-scroll']);
     versionModule.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/diff', {
             page: 'diff',

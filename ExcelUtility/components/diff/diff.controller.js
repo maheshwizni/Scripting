@@ -4,9 +4,12 @@
 (function (ng, w) {
     var versionModule = ng.module('version');
     versionModule.filter('range', function () {
-        return function (max, min) {
+        return function (max, min, total) {
             if (min == undefined) {
                 min = 1;
+            }
+            if(total && total < max) {
+                max = total
             }
             var versions = [];
             max = parseInt(max);
@@ -25,12 +28,13 @@
             return $http.get(URL + '/' + sheetName + '/' + version);
         };
     }]);
-    versionModule.controller('DiffController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
+    versionModule.controller('DiffController', ['DiffService', 'usSpinnerService', '$timeout', function (DiffService, usSpinnerService, $timeout) {
         var diffController = this;
-        usSpinnerService.spin('loadingSpin');
+        var loadingBarName = 'loadingSpin';
+        usSpinnerService.spin('');
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
-                usSpinnerService.stop('loadingSpin');
+                usSpinnerService.stop(loadingBarName);
                 diffController.sheetNameAndLatestVersion = response;
             }).error(function () {
                 diffController.sheetNameAndLatestVersion = [];
@@ -46,12 +50,12 @@
                 diffController.newOldSchema = ng.merge(newDataObj[0], oldDataObj[0]);
                 diffController.newVersionData = newDataObj;
                 diffController.oldVersionData = oldDataObj;
-                usSpinnerService.stop('loadingSpin');
+                usSpinnerService.stop(loadingBarName);
             }
         };
         diffController.showDiff = function () {
             if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
-                usSpinnerService.spin('loadingSpin');
+                usSpinnerService.spin(loadingBarName);
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
                 diffController.newVersionData = undefined;
@@ -86,5 +90,13 @@
         diffController.isSameRow = function (oldRow, newRow) {
             return ng.equals(oldRow, newRow);
         };
+        diffController.showMoreDiff = function () {
+            usSpinnerService.spin(loadingBarName);
+            diffController.showMaxDiffRows += 20;
+            $timeout(function() {
+                usSpinnerService.stop(loadingBarName);
+            }, 5000);
+        };
+        diffController.showMaxDiffRows = 0;
     }]);
 })(angular, window);
