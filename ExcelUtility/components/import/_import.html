@@ -66,7 +66,7 @@
                                 <input class="form-control" type="text" ng-model="group.Name" class="input-xlarge" placeholder="Enter Group Name" value="{{group.Name}}">
                             </div>
                             <div class="col-md-6">
-                                <select id="colGroupPrimary" class="form-control" ng-model="group.Cols" multiple="multiple">
+                                <select class="form-control multiselectList" ng-model="group.Cols" multiple="multiple">
                                     <option ng-repeat="(key,value) in importController.headers" ng-selected="group.Cols.indexOf(value) != -1">{{value}}</option>
                                 </select>
                             </div>
@@ -74,7 +74,7 @@
                                 <input class="form-control" id="GroupPrimarySAP" readonly type="text" class="input-xlarge" placeholder="Enter Group Name" value="SAP Key">
                             </div>
                             <div class="col-md-3" ng-if="$first">
-                                <select id="colGroupPrimarySAP" class="form-control" multiple="multiple">
+                                <select id="colGroupPrimarySAP" class="form-control multiselectList" multiple="multiple">
                                     <option ng-repeat="(key,value) in importController.headers">{{value}}</option>
                                 </select>
                             </div>

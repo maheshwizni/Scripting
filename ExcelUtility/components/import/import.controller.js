@@ -85,6 +85,7 @@
 
         importController.addNewGroup = function(){
           importController.groupsData.push({Name: '', Cols: []});
+            //TODO: Show new select list as multi-select
         };
 
         importController.configureGroups = function(){
@@ -98,6 +99,9 @@
         };
 
         importController.showGroups = function(){
+            $('.multiselectList').multiselect({
+                includeSelectAllOption: false
+            });
             element.modal('show');
         };
 
@@ -129,8 +133,8 @@
                             importController.headers = jsonData[0];
                             importController.rowData = json;
                             importController.jsonData = jsonData;
-                            importController.groupsData = groups || [{Name: "Primary", Cols: []}];
-                            importController.groupsConfigured = groups[0].Cols.length === 0;
+                            importController.groupsData = (!groups)? [{Name: "Primary", Cols: []}] : groups;
+                            importController.groupsConfigured = importController.groupsData[0].Cols.length > 0;
                             usSpinnerService.stop('loadingSpin');
                         })
                         .error(function(){
