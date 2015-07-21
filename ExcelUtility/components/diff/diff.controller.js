@@ -56,6 +56,7 @@
         diffController.showDiff = function () {
             if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
                 usSpinnerService.spin(loadingBarName);
+                diffController.showMaxDiffRows = 20;
                 diffController.isShowingDiff = true;
                 diffController.oldVersionData = undefined;
                 diffController.newVersionData = undefined;
