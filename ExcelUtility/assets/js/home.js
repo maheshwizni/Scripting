@@ -67,16 +67,24 @@ function buildTable(tableName, cols, json, columnsAdded){
     table.fnAddData(json);
     $('#' + tableName + '_filter').append('<a href="javascript:void(0);" class="clearFilter" data-val="' + tableName + '">Clear</a>');
     var groupBy = $('#groupBy' + tableName);
+    $('#secondaryGrouping' + tableName).hide();
     if(groupBy){
         $('#groupBy' + tableName + ' option').remove();
         $('#groupBy' + tableName).append(new Option('NONE'));
+        $('#groupBy' + tableName + '2 option').remove();
+        $('#groupBy' + tableName + '2').append(new Option('NONE'));
         $.each(columnsAdded, function(index, value){
-            $('#groupBy' + tableName).append(new Option(value.title, index));
+            if(value.title !== '') {
+                $('#groupBy' + tableName).append(new Option(value.title, index));
+                $('#groupBy' + tableName + '2').append(new Option(value.title, index));
+            }
         });
 
         $(document).on('change', '#groupBy' + tableName, function(e){
             $this = $(this);
             var selectedVal = $('#groupBy' + tableName).val();
+            $('#secondaryGrouping' + tableName).show();
+            $('#groupBy' + tableName + '2').val('NONE');
             console.log(selectedVal);
             //debugger;
             // Clear Grouping First
@@ -104,21 +112,105 @@ function buildTable(tableName, cols, json, columnsAdded){
                 table.rowGrouping({
                     //bExpandableGrouping: true,GroupingColumnIndex:5,bHideGroupingColumn: false,asExpandedGroups:[]
                     iGroupingColumnIndex: selectedVal,
-                    sGroupingColumnSortDirection: "asc",
+                    /*iGroupingColumnIndex2: 1,*/
+                    /*sGroupingColumnSortDirection: "asc",
+                    sGroupingColumnSortDirection2: "asc",*/
                     //iGroupingOrderByColumnIndex: 0,
                     bExpandableGrouping: true,
+                    /*bExpandableGrouping2: true,*/
                     bHideGroupingColumn: false,
-                    asExpandedGroups: [],
+                    /*bHideGroupingColumn2: false,*/
+                    /*asExpandedGroups: [],
+                    asExpandedGroups2: [],*/
                     fnOnGrouped: function() {
                         console.log('Rows are regrouped!');
                     },
+                    /*fnOnGrouped2: function() {
+                        console.log('Secondary Rows are regrouped!');
+                    },*/
                     fnOnGroupCompleted: function( oGroup ) {
                         var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
                         $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
                     },
                     fnGroupLabelFormat: function(label, oGroup) {
                         return " <i>"+ label + "</i>";
+                    },
+                    /*fnOnGroupCompleted2: function( oGroup ) {
+                        var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
+                        $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
+                    },*/
+                   /* fnGroupLabelFormat2: function(label, oGroup) {
+                        return " <i>"+ label + "</i>";
+                    }*/
+                    /*fnGroupLabelFormat: function(label) { return ""+ label + "(primary group)"; } ,
+                    fnGroupLabelFormat2: function(label) { return ""+label + "(secondary group)"; } ,*/
+                });
+            }
+        });
+
+        $(document).on('change', '#groupBy' + tableName + '2', function(e){
+            $this = $(this);
+            var selectedVal = $('#groupBy' + tableName + '2').val();
+
+            console.log(selectedVal);
+            //debugger;
+            // Clear Grouping First
+            for(var i=0; i<table.dataTableSettings.length;i++) {
+                var oSettings = table.dataTableSettings[i];
+                for (var f = 0; f < oSettings.aoDrawCallback.length; f++) {
+                    if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
+                        oSettings.aoDrawCallback.splice(f, 1);
+                        break;
                     }
+                }
+                oSettings.aaSortingFixed = null;
+            }
+            if(selectedVal === 'NONE'){
+                // Clear Table and Redraw
+                var data = [];
+                switch(tableName){
+                    case "siteTbl": data = sites;break;
+                    case "sysTbl": data = systems;break;
+                    case "assetTbl": data = assets;break;
+                };
+                table.fnClearTable();
+                table.fnAddData(data);
+            }else {
+                table.rowGrouping({
+                    //bExpandableGrouping: true,GroupingColumnIndex:5,bHideGroupingColumn: false,asExpandedGroups:[]
+                    iGroupingColumnIndex: $('#groupBy' + tableName).val(),
+                    iGroupingColumnIndex2: $('#groupBy' + tableName + '2').val(),
+                    /*sGroupingColumnSortDirection: "asc",
+                     sGroupingColumnSortDirection2: "asc",*/
+                    //iGroupingOrderByColumnIndex: 0,
+                    bExpandableGrouping: true,
+                    bExpandableGrouping2: true,
+                    bHideGroupingColumn: false,
+                    bHideGroupingColumn2: false,
+                    /*asExpandedGroups: [],
+                     asExpandedGroups2: [],*/
+                    fnOnGrouped: function() {
+                        console.log('Rows are regrouped!');
+                    },
+                    /*fnOnGrouped2: function() {
+                     console.log('Secondary Rows are regrouped!');
+                     },*/
+                    fnOnGroupCompleted: function( oGroup ) {
+                        var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
+                        $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
+                    },
+                    fnGroupLabelFormat: function(label, oGroup) {
+                        return " <i>"+ label + "</i>";
+                    },
+                    /*fnOnGroupCompleted2: function( oGroup ) {
+                     var length = $('#' + tableName + ' tr' + oGroup.groupItemClass).length;
+                     $(oGroup.nGroup).find("td").append("<sub>"+length+"</sub>");
+                     },*/
+                     fnGroupLabelFormat2: function(label, oGroup) {
+                     return " <i>"+ label + "</i>";
+                     }
+                    /*fnGroupLabelFormat: function(label) { return ""+ label + "(primary group)"; } ,
+                     fnGroupLabelFormat2: function(label) { return ""+label + "(secondary group)"; } ,*/
                 });
             }
         });
