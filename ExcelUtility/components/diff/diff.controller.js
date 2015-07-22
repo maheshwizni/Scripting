@@ -44,12 +44,12 @@
         var showBothVersionDiff = function () {
             if (oldData && newData) {
                 diffController.isOldNewVersionDataSame = oldData == newData;
-                diffController.isShowingDiff = false;
                 var oldDataObj = JSON.parse(oldData);
                 var newDataObj = JSON.parse(newData);
                 diffController.newOldSchema = ng.merge(newDataObj[0], oldDataObj[0]);
                 diffController.newVersionData = newDataObj;
                 diffController.oldVersionData = oldDataObj;
+                diffController.isShowingDiff = false;
                 usSpinnerService.stop(loadingBarName);
             }
         };
