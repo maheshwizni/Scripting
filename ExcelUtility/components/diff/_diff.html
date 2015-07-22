@@ -87,14 +87,14 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{{ $index+1 }}</td>
+                        <td>{{ ::$index+1 }}</td>
                         <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newOldSchema"
                             ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
                             {{ ::diffController.oldVersionData[rowNumbe][key] || '-' }}
                         </td>
                     </tr>
                     <tr>
-                        <td>{{ $index+1 }}</td>
+                        <td>{{ ::$index+1 }}</td>
                         <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newOldSchema"
                             ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
                             {{ ::diffController.newVersionData[rowNumbe][key] || '-' }}
