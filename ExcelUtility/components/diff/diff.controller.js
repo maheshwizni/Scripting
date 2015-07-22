@@ -31,7 +31,7 @@
     versionModule.controller('DiffController', ['DiffService', 'usSpinnerService', '$timeout', function (DiffService, usSpinnerService, $timeout) {
         var diffController = this;
         var loadingBarName = 'loadingSpin';
-        usSpinnerService.spin('');
+        usSpinnerService.spin(loadingBarName);
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
                 usSpinnerService.stop(loadingBarName);
