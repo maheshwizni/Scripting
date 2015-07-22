@@ -19,7 +19,7 @@
             <div class="col-md-8">
                 <label class="col-md-3 control-label"> Select Version:</label>
                 <div class="col-md-9 selectContainer">
-                    <select ng-model="versionController.selectedToVersion" class="form-control"
+                    <select ng-model="versionController.selectedVersion" class="form-control"
                             ng-options="n for n in versionController.selectedSheet.version | range">
                         <option value="">-- Choose Version --</option>
                     </select>
@@ -31,13 +31,13 @@
             <div class="col-md-8">
                 <label class="col-md-3 control-label">&nbsp;</label>
                 <div class="col-md-9">
-                    <input type="button" class="btn-lg btn-success pull-left" value="Show Data">
+                    <input type="button" class="btn-lg btn-success pull-left" value="Show Data" ng-click="versionController.showData()">
                 </div>
             </div>
         </div>
-        <table>
-            <tr>
-                <td></td>
+        <table ng-if="versionController.data">
+            <tr ng-repeat="row in versionController.data">
+                <td ng-repeat="(key, value) in versionController.data[0]">{{row[key]}}</td>
             </tr>
         </table>
     </div>

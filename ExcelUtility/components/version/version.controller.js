@@ -11,5 +11,15 @@
             }).error(function () {
                 versionController.sheetNameAndLatestVersion = [];
             });
+        versionController.showData = function() {
+            DiffService.getSheetData(versionController.selectedSheet.sheetName, versionController.selectedVersion)
+                .success(function (response) {
+                    versionController.data = JSON.parse(response.metaData);
+                    console.log(versionController.data);
+                })
+                .error(function () {
+                    versionController.data = undefined;
+                });
+        };
     }]);
 })(angular);
