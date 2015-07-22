@@ -9,7 +9,7 @@
                 <label class="col-md-3 control-label">Sheet Name:</label>
                 <div class="col-md-9 selectContainer">
                     <select ng-model="versionController.selectedSheet" class="form-control"
-                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in versionController.sheetNameAndLatestVersion">
+                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in ::versionController.sheetNameAndLatestVersion">
                         <option value="">-- Choose Sheet Name --</option>
                     </select>
                 </div>
@@ -35,9 +35,12 @@
                 </div>
             </div>
         </div>
-        <table ng-if="versionController.data">
-            <tr ng-repeat="row in versionController.data">
-                <td ng-repeat="(key, value) in versionController.data[0]">{{row[key]}}</td>
+        <span style="position: absolute; left: 50%;" us-spinner="{radius:30, width:8, length: 16}"
+              spinner-key="loadingVersionSpin">
+        </span>
+        <table ng-if="versionController.data.length">
+            <tr ng-repeat="row in ::versionController.data">
+                <td ng-repeat="(key, value) in ::versionController.data[0]">{{::row[key]}}</td>
             </tr>
         </table>
     </div>
