@@ -4,7 +4,7 @@
 (function (ng) {
     var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll']);
     versionModule.controller('VersionController', ['$rootScope', '$router', function ($rootScope, $router) {
-        var master = this;
+        var version = this;
         $router.config([
             {
                 path: '/',
@@ -36,10 +36,13 @@
             }
         ]);
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-            master.page = current.$$route.page;
-            master.title = current.$$route.title;
+            version.page = current.$$route.page;
+            version.title = current.$$route.title;
         });
     }]);
+    versionModule.constant("GlobalConstant", {
+        API_URL: 'http://104.236.140.70:9000/site'
+    });
     versionModule.service('VersionService', ['$http', 'GlobalConstant', function ($http, GlobalConstant) {
         var URL = GlobalConstant.API_URL;
         this.getSheetNameAndLatestVersion = function () {
@@ -52,7 +55,20 @@
             return $http.post(URL, postData);
         };
     }]);
-    versionModule.constant("GlobalConstant", {
-        API_URL: 'http://104.236.140.70:9000/site'
+    versionModule.filter('range', function () {
+        return function (max, min, total) {
+            if (min == undefined) {
+                min = 1;
+            }
+            if(total && total < max) {
+                max = total
+            }
+            var versions = [];
+            max = parseInt(max);
+            for (var i = min; i <= max; i++) {
+                versions.push(i);
+            }
+            return versions;
+        };
     });
 })(angular);

@@ -3,36 +3,11 @@
  */
 (function (ng, w) {
     var versionModule = ng.module('version');
-    versionModule.filter('range', function () {
-        return function (max, min, total) {
-            if (min == undefined) {
-                min = 1;
-            }
-            if(total && total < max) {
-                max = total
-            }
-            var versions = [];
-            max = parseInt(max);
-            for (var i = min; i <= max; i++) {
-                versions.push(i);
-            }
-            return versions;
-        };
-    });
-    versionModule.service('DiffService', ['$http', 'GlobalConstant', function ($http, GlobalConstant) {
-        var URL = GlobalConstant.API_URL;
-        this.getSheetNameAndLatestVersion = function () {
-            return $http.get(URL + '/sheetNameAndVersion');
-        };
-        this.getSheetData = function (sheetName, version) {
-            return $http.get(URL + '/' + sheetName + '/' + version);
-        };
-    }]);
-    versionModule.controller('DiffController', ['DiffService', 'usSpinnerService', '$timeout', function (DiffService, usSpinnerService, $timeout) {
+    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', function (VersionService, usSpinnerService, $timeout) {
         var diffController = this;
         var loadingBarName = 'loadingSpin';
         usSpinnerService.spin(loadingBarName);
-        DiffService.getSheetNameAndLatestVersion()
+        VersionService.getSheetNameAndLatestVersion()
             .success(function (response) {
                 usSpinnerService.stop(loadingBarName);
                 diffController.sheetNameAndLatestVersion = response;
@@ -64,7 +39,7 @@
                 diffController.error = undefined;
                 oldData = undefined;
                 newData = undefined;
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
+                VersionService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
                     .success(function (response) {
                         oldData = response.metaData;
                         showBothVersionDiff();
@@ -72,7 +47,7 @@
                     .error(function () {
                         diffController.oldVersionData = undefined;
                     });
-                DiffService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
+                VersionService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
                     .success(function (response) {
                         newData = response.metaData;
                         showBothVersionDiff();

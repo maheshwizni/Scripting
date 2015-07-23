@@ -3,29 +3,29 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('VersionController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
-        var versionController = this;
+    versionModule.controller('HistoryController', ['DiffService', 'usSpinnerService', function (DiffService, usSpinnerService) {
+        var history = this;
         var loadingBarName = 'loadingVersionSpin';
         usSpinnerService.spin(loadingBarName);
         DiffService.getSheetNameAndLatestVersion()
             .success(function (response) {
                 usSpinnerService.stop(loadingBarName);
-                versionController.sheetNameAndLatestVersion = response;
+                history.sheetNameAndLatestVersion = response;
             }).error(function () {
                 usSpinnerService.stop(loadingBarName);
-                versionController.sheetNameAndLatestVersion = [];
+                history.sheetNameAndLatestVersion = [];
             });
-        versionController.showData = function() {
+        history.showData = function() {
             usSpinnerService.spin(loadingBarName);
-            versionController.data = undefined;
-            DiffService.getSheetData(versionController.selectedSheet.sheetName, versionController.selectedVersion)
+            history.data = undefined;
+            DiffService.getSheetData(history.selectedSheet.sheetName, history.selectedVersion)
                 .success(function (response) {
                     usSpinnerService.stop(loadingBarName);
-                    versionController.data = JSON.parse(response.metaData);
+                    history.data = JSON.parse(response.metaData);
                 })
                 .error(function () {
                     usSpinnerService.stop(loadingBarName);
-                    versionController.data = undefined;
+                    history.data = undefined;
                 });
         };
     }]);
