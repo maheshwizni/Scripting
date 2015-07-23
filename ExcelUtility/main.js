@@ -25,8 +25,8 @@
             {
                 page: 'import',
                 title: 'Excel Import',
-                path: '/import',
-                component: 'import'
+                path: '/importExcel',
+                component: 'importExcel'
             },
             {
                 page: 'Version Administration',
