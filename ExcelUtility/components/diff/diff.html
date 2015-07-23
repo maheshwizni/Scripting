@@ -21,8 +21,8 @@
                 <label class="col-md-3 control-label">Sheet Name:</label>
 
                 <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedSheet"
-                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diffController.sheetNameAndLatestVersion">
+                    <select class="form-control" ng-model="diff.selectedSheet"
+                            ng-options="sheetNameAndLatestVersion.sheetName for sheetNameAndLatestVersion in diff.sheetNameAndLatestVersion">
                         <option value="">-- Choose Sheet Name --</option>
                     </select>
                 </div>
@@ -35,8 +35,8 @@
                 <label class="col-md-3 control-label">Version From:</label>
 
                 <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedFromVersion"
-                            ng-options="n for n in diffController.selectedSheet.version | range">
+                    <select class="form-control" ng-model="diff.selectedFromVersion"
+                            ng-options="n for n in diff.selectedSheet.version | range">
                         <option value="">-- Choose Version --</option>
                     </select>
                 </div>
@@ -49,8 +49,8 @@
                 <label class="col-md-3 control-label">Version To:</label>
 
                 <div class="col-md-9 selectContainer">
-                    <select class="form-control" ng-model="diffController.selectedToVersion"
-                            ng-options="n for n in diffController.selectedSheet.version | range : diffController.selectedFromVersion + 1">
+                    <select class="form-control" ng-model="diff.selectedToVersion"
+                            ng-options="n for n in diff.selectedSheet.version | range : diff.selectedFromVersion + 1">
                         <option value="">-- Choose Version --</option>
                     </select>
                 </div>
@@ -64,23 +64,23 @@
 
                 <div class="col-md-9">
                     <input type="button" class="btn-lg btn-success pull-left" value="Show Diff"
-                           ng-disabled="isShowingDiff" ng-click="diffController.showDiff()">
+                           ng-disabled="isShowingDiff" ng-click="diff.showDiff()">
                 </div>
             </div>
         </div>
-        <span class="alert-danger">{{diffController.error}}</span>
+        <span class="alert-danger">{{diff.error}}</span>
         <hr/>
-        <span class="alert-info" ng-show="diffController.isOldNewVersionDataSame && !diffController.isShowingDiff">No changes in this version.</span>
-        <div infinite-scroll="diffController.showMoreDiff()" infinite-scroll-distance="0">
-            <div ng-if="!diffController.isOldNewVersionDataSame && !diffController.isShowingDiff" class="table"
-                 ng-repeat="rowNumbe in diffController.showMaxDiffRows | range : 0 : diffController.oldVersionData.length track by $index ">
-                <table ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"
+        <span class="alert-info" ng-show="diff.isOldNewVersionDataSame && !diff.isShowingDiff">No changes in this version.</span>
+        <div infinite-scroll="diff.showMoreDiff()" infinite-scroll-distance="0">
+            <div ng-if="!diff.isOldNewVersionDataSame && !diff.isShowingDiff" class="table"
+                 ng-repeat="rowNumbe in diff.showMaxDiffRows | range : 0 : diff.oldVersionData.length track by $index ">
+                <table ng-if="!diff.isSameRow(diff.oldVersionData[rowNumbe], diff.newVersionData[rowNumbe])"
                        class="table">
                     <thead>
                     <tr>
                         <th>Row Number</th>
-                        <th ng-repeat="(key, value) in ::diffController.newOldSchema"
-                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
+                        <th ng-repeat="(key, value) in ::diff.newOldSchema"
+                            ng-if="diff.oldVersionData[rowNumbe][key] != diff.newVersionData[rowNumbe][key]">
                             {{::value}}
                         </th>
                     </tr>
@@ -88,21 +88,21 @@
                     <tbody>
                     <tr>
                         <td>{{ ::$index+1 }}</td>
-                        <td class="bg_oldValue" ng-repeat="(key, value) in ::diffController.newOldSchema"
-                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                            {{ ::diffController.oldVersionData[rowNumbe][key] || '-' }}
+                        <td class="bg_oldValue" ng-repeat="(key, value) in ::diff.newOldSchema"
+                            ng-if="diff.oldVersionData[rowNumbe][key] != diff.newVersionData[rowNumbe][key]">
+                            {{ ::diff.oldVersionData[rowNumbe][key] || '-' }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ ::$index+1 }}</td>
-                        <td class="bg_newValue" ng-repeat="(key, value) in ::diffController.newOldSchema"
-                            ng-if="diffController.oldVersionData[rowNumbe][key] != diffController.newVersionData[rowNumbe][key]">
-                            {{ ::diffController.newVersionData[rowNumbe][key] || '-' }}
+                        <td class="bg_newValue" ng-repeat="(key, value) in ::diff.newOldSchema"
+                            ng-if="diff.oldVersionData[rowNumbe][key] != diff.newVersionData[rowNumbe][key]">
+                            {{ ::diff.newVersionData[rowNumbe][key] || '-' }}
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <hr ng-if="!diffController.isSameRow(diffController.oldVersionData[rowNumbe], diffController.newVersionData[rowNumbe])"/>
+                <hr ng-if="!diff.isSameRow(diff.oldVersionData[rowNumbe], diff.newVersionData[rowNumbe])"/>
             </div>
         </div>
         <span style="position: absolute; left: 50%;" us-spinner="{radius:30, width:8, length: 16}"

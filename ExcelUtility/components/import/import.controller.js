@@ -3,18 +3,6 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.service('VersionService', ['$http', 'GlobalConstant', function ($http, GlobalConstant) {
-        var URL = GlobalConstant.API_URL;
-        this.getSheetNameAndLatestVersion = function () {
-            return $http.get(URL + '/sheetNameAndVersion');
-        };
-        this.getSheetData = function (sheetName, version) {
-            return $http.get(URL + '/' + sheetName + '/' + version);
-        };
-        this.postSheetData = function (postData) {
-            return $http.post(URL, postData);
-        };
-    }]);
     versionModule.controller('ImportController', ['$timeout', 'VersionService', 'usSpinnerService', function ($timeout, VersionService, usSpinnerService) {
         /** drop target **/
         var importController = this;
