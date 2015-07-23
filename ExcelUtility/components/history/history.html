@@ -20,7 +20,7 @@
                 <label class="col-md-3 control-label"> Select Version:</label>
                 <div class="col-md-9 selectContainer">
                     <select ng-model="history.selectedVersion" class="form-control"
-                            ng-options="n for n in history.selectedSheet.history | range">
+                            ng-options="n for n in history.selectedSheet.version | range">
                         <option value="">-- Choose Version --</option>
                     </select>
                 </div>
