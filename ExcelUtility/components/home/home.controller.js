@@ -3,7 +3,11 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('HomeController', [HomeController]);
-    function HomeController() {
+    versionModule.controller('HomeController', ['$rootScope', HomeController]);
+    function HomeController($rootScope) {
+        var home = this;
+        home.activate = function () {
+            $rootScope.setTitleAndPageProperty('Home', 'home');
+        };
     }
 })(angular);

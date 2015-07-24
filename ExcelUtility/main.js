@@ -3,7 +3,7 @@
  */
 (function (ng) {
     var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll']);
-    versionModule.controller('VersionController', ['$router', function ($router) {
+    versionModule.controller('VersionController', ['$router', '$rootScope', function ($router, $rootScope) {
         var version = this;
         $router.config([
             {
@@ -27,7 +27,10 @@
                 component: 'history'
             }
         ]);
-        version.a = "asdf";
+        $rootScope.setTitleAndPageProperty = function(title, page) {
+            version.title = title;
+            version.page = page;
+        };
     }]);
     versionModule.constant("GlobalConstant", {
         API_URL: 'http://104.236.140.70:9000/site'

@@ -3,82 +3,80 @@
  */
 (function (ng, w) {
     var versionModule = ng.module('version');
-    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', DiffController]);
-    function DiffController(VersionService, usSpinnerService, $timeout) {
-        var diffController = this;
+    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', '$rootScope', DiffController]);
+    function DiffController(VersionService, usSpinnerService, $timeout, $rootScope) {
+        var diff = this;
+        diff.activate = function () {
+            $rootScope.setTitleAndPageProperty('Version Difference', 'diff');
+        };
         var loadingBarName = 'loadingSpin';
         usSpinnerService.spin(loadingBarName);
         VersionService.getSheetNameAndLatestVersion()
             .success(function (response) {
                 usSpinnerService.stop(loadingBarName);
-                diffController.sheetNameAndLatestVersion = response;
+                diff.sheetNameAndLatestVersion = response;
             }).error(function () {
-                diffController.sheetNameAndLatestVersion = [];
+                diff.sheetNameAndLatestVersion = [];
             });
         var oldData = undefined;
         var newData = undefined;
         var showBothVersionDiff = function () {
             if (oldData && newData) {
-                diffController.isOldNewVersionDataSame = oldData == newData;
+                diff.isOldNewVersionDataSame = oldData == newData;
                 var oldDataObj = JSON.parse(oldData);
                 var newDataObj = JSON.parse(newData);
-                diffController.newOldSchema = ng.merge(newDataObj[0], oldDataObj[0]);
-                diffController.newVersionData = newDataObj;
-                diffController.oldVersionData = oldDataObj;
-                diffController.isShowingDiff = false;
+                diff.newOldSchema = ng.merge(newDataObj[0], oldDataObj[0]);
+                diff.newVersionData = newDataObj;
+                diff.oldVersionData = oldDataObj;
+                diff.isShowingDiff = false;
                 usSpinnerService.stop(loadingBarName);
             }
         };
-        diffController.showDiff = function () {
-            if (diffController.selectedSheet && diffController.selectedToVersion && diffController.selectedFromVersion) {
+        diff.showDiff = function () {
+            if (diff.selectedSheet && diff.selectedToVersion && diff.selectedFromVersion) {
                 usSpinnerService.spin(loadingBarName);
-                diffController.showMaxDiffRows = 20;
-                diffController.isShowingDiff = true;
-                diffController.oldVersionData = undefined;
-                diffController.newVersionData = undefined;
-                diffController.isOldNewVersionDataSame = false;
-                diffController.error = undefined;
+                diff.showMaxDiffRows = 20;
+                diff.isShowingDiff = true;
+                diff.oldVersionData = undefined;
+                diff.newVersionData = undefined;
+                diff.isOldNewVersionDataSame = false;
+                diff.error = undefined;
                 oldData = undefined;
                 newData = undefined;
-                VersionService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedFromVersion)
+                VersionService.getSheetData(diff.selectedSheet.sheetName, diff.selectedFromVersion)
                     .success(function (response) {
                         oldData = response.metaData;
                         showBothVersionDiff();
                     })
                     .error(function () {
-                        diffController.oldVersionData = undefined;
+                        diff.oldVersionData = undefined;
                     });
-                VersionService.getSheetData(diffController.selectedSheet.sheetName, diffController.selectedToVersion)
+                VersionService.getSheetData(diff.selectedSheet.sheetName, diff.selectedToVersion)
                     .success(function (response) {
                         newData = response.metaData;
                         showBothVersionDiff();
                     })
                     .error(function () {
-                        diffController.newVersionData = undefined;
+                        diff.newVersionData = undefined;
                     });
-            } else if (!diffController.selectedSheet) {
-                diffController.error = 'Please Select Sheet Name';
-            } else if (!diffController.selectedToVersion) {
-                diffController.error = 'Please Select To Version Number';
-            } else if (!diffController.selectedFromVersion) {
-                diffController.error = 'Please Select From Version Number';
+            } else if (!diff.selectedSheet) {
+                diff.error = 'Please Select Sheet Name';
+            } else if (!diff.selectedToVersion) {
+                diff.error = 'Please Select To Version Number';
+            } else if (!diff.selectedFromVersion) {
+                diff.error = 'Please Select From Version Number';
             }
         };
-        diffController.isSameRow = function (oldRow, newRow) {
+        diff.isSameRow = function (oldRow, newRow) {
             return ng.equals(oldRow, newRow);
         };
-        diffController.showMoreDiff = function () {
+        diff.showMoreDiff = function () {
             usSpinnerService.spin(loadingBarName);
-            diffController.showMaxDiffRows += 20;
+            diff.showMaxDiffRows += 20;
             $timeout(function () {
                 usSpinnerService.stop(loadingBarName);
             }, 5000);
         };
-        diffController.showMaxDiffRows = 0;
+        diff.showMaxDiffRows = 0;
     }
-
-    DiffController.prototype.activate = function () {
-        console.log(111, this, this.a);
-        return true;
-    };
 })(angular, window);
