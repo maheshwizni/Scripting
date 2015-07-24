@@ -30,44 +30,44 @@
                   spinner-key="loadingSpin">
             </span>
             <div>
-                <button style="margin-right:10px;" ng-repeat="sheet in import.sheets" class="btn-lg btn-warning" type="button" name="{{sheet.name}}" ng-click="import.renderSheet($index)">{{sheet.text}}</button>
+                <button style="margin-right:10px;" ng-repeat="sheet in importExcel.sheets" class="btn-lg btn-warning" type="button" name="{{sheet.name}}" ng-click="importExcel.renderSheet($index)">{{sheet.text}}</button>
             </div>
             <div class="row">
-                <h2 ng-show="import.showSaveOption">{{import.selectedSheet}}</h2>
-                <a href="javascript:void(0);" ng-show="import.showSaveOption" ng-click="import.showGroups()">Configure Groups</a>
+                <h2 ng-show="importExcel.showSaveOption">{{importExcel.selectedSheet}}</h2>
+                <a href="javascript:void(0);" ng-show="importExcel.showSaveOption" ng-click="importExcel.showGroups()">Configure Groups</a>
             </div>
             <div class="row">
                 <table class="table table-striped table-condensed table-hover">
                     <thead>
                         <tr>
-                            <th ng-repeat="(key,value) in import.headers">{{value}}</th>
+                            <th ng-repeat="(key,value) in importExcel.headers">{{value}}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="data in import.rowData">
-                            <td ng-repeat="(key,value) in import.headers">{{data[value]}}</td>
+                        <tr ng-repeat="data in importExcel.rowData">
+                            <td ng-repeat="(key,value) in importExcel.headers">{{data[value]}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div><input ng-show="import.showSaveOption" class="btn-lg btn-success" type="button" value="Save" ng-click="import.saveSheet()"> </div>
+            <div><input ng-show="importExcel.showSaveOption" class="btn-lg btn-success" type="button" value="Save" ng-click="importExcel.saveSheet()"> </div>
         </div>
         <div class="modal fade" id="myModal" role="dialog" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog custom-class">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-show="import.groupsConfigured">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-show="importExcel.groupsConfigured">&times;</button>
                         <h3 class="modal-title">Configure Groups</h3>
                     </div>
                     <div class="modal-body" id="modalBody">
-                        <a href="javascript:void(0);" ng-click="import.addNewGroup()">Add New Group</a>
-                        <div class="row" ng-repeat="group in import.groupsData" style="margin-bottom: 5px;">
+                        <a href="javascript:void(0);" ng-click="importExcel.addNewGroup()">Add New Group</a>
+                        <div class="row" ng-repeat="group in importExcel.groupsData" style="margin-bottom: 5px;">
                             <div class="col-md-2">
                                 <input class="form-control" type="text" ng-model="group.Name" class="input-xlarge" placeholder="Enter Group Name" value="{{group.Name}}">
                             </div>
                             <div class="col-md-6">
                                 <select class="form-control multiselectList" ng-model="group.Cols" multiple="multiple">
-                                    <option ng-repeat="(key,value) in import.headers" ng-selected="group.Cols.indexOf(value) != -1">{{value}}</option>
+                                    <option ng-repeat="(key,value) in importExcel.headers" ng-selected="group.Cols.indexOf(value) != -1">{{value}}</option>
                                 </select>
                             </div>
                             <div class="col-md-1" ng-if="$first">
@@ -75,13 +75,13 @@
                             </div>
                             <div class="col-md-3" ng-if="$first">
                                 <select id="colGroupPrimarySAP" class="form-control multiselectList" multiple="multiple">
-                                    <option ng-repeat="(key,value) in import.headers">{{value}}</option>
+                                    <option ng-repeat="(key,value) in importExcel.headers">{{value}}</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary " ng-click="import.configureGroups()">Done</button>
+                        <button type="button" class="btn btn-primary " ng-click="importExcel.configureGroups()">Done</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

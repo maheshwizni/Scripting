@@ -7,9 +7,7 @@
         /** drop target **/
         var importExcel = this;
         importExcel.showSaveOption = false;
-        var _target = document.getElementById('drop');
-        var _target2 = document.getElementById('files');
-        var element = angular.element('#myModal');
+        var element;
         var _workstart = function () {
             usSpinnerService.spin('loadingSpin');
         };
@@ -159,23 +157,27 @@
             return simplifiedSelectedSheet;
         }
 
-        /** Drop it like it's hot **/
-        DropSheet({
-            drop: _target,
-            fileSelect: _target2,
-            on: {
-                workstart: _workstart,
-                workend: _workend,
-                sheet: _onsheet,
-                foo: 'bar'
-            },
-            errors: {
-                badfile: _badfile,
-                pending: _pending,
-                failed: _failed,
-                large: _large,
-                foo: 'bar'
-            }
-        });
+        setTimeout(function() {
+            var _target = document.getElementById('drop');
+            var _target2 = document.getElementById('files');
+            element = angular.element('#myModal');
+            DropSheet({
+                drop: _target,
+                fileSelect: _target2,
+                on: {
+                    workstart: _workstart,
+                    workend: _workend,
+                    sheet: _onsheet,
+                    foo: 'bar'
+                },
+                errors: {
+                    badfile: _badfile,
+                    pending: _pending,
+                    failed: _failed,
+                    large: _large,
+                    foo: 'bar'
+                }
+            });
+        }, 1000);
     }]);
 })(angular);
