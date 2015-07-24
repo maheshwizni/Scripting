@@ -3,9 +3,13 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('ImportExcelController', ['$timeout', 'VersionService', 'usSpinnerService', function ($timeout, VersionService, usSpinnerService) {
+    versionModule.controller('ImportExcelController', ['$timeout', 'VersionService', 'usSpinnerService', ImportExcelController]);
+    function ImportExcelController($timeout, VersionService, usSpinnerService) {
         /** drop target **/
         var importExcel = this;
+        importExcel.activate = ['$scope', function ($scope) {
+            $scope.setTitleAndPageProperty('Excel Import', 'import');
+        }];
         importExcel.showSaveOption = false;
         var element;
         var _workstart = function () {
@@ -157,7 +161,7 @@
             return simplifiedSelectedSheet;
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             var _target = document.getElementById('drop');
             var _target2 = document.getElementById('files');
             element = angular.element('#myModal');
@@ -179,5 +183,5 @@
                 }
             });
         }, 1000);
-    }]);
+    }
 })(angular);

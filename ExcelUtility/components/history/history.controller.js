@@ -3,8 +3,12 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', function (VersionService, usSpinnerService) {
+    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', HistoryController]);
+    function HistoryController(VersionService, usSpinnerService) {
         var history = this;
+        history.activate = ['$scope', function ($scope) {
+            $scope.setTitleAndPageProperty('Version History', 'history');
+        }];
         var loadingBarName = 'loadingVersionSpin';
         usSpinnerService.spin(loadingBarName);
         VersionService.getSheetNameAndLatestVersion()
@@ -15,7 +19,7 @@
                 usSpinnerService.stop(loadingBarName);
                 history.sheetNameAndLatestVersion = [];
             });
-        history.showData = function() {
+        history.showData = function () {
             usSpinnerService.spin(loadingBarName);
             history.data = undefined;
             VersionService.getSheetData(history.selectedSheet.sheetName, history.selectedVersion)
@@ -28,5 +32,5 @@
                     history.data = undefined;
                 });
         };
-    }]);
+    }
 })(angular);
