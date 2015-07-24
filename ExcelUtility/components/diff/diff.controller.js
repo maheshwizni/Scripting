@@ -3,12 +3,12 @@
  */
 (function (ng, w) {
     var versionModule = ng.module('version');
-    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', '$rootScope', DiffController]);
-    function DiffController(VersionService, usSpinnerService, $timeout, $rootScope) {
+    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', DiffController]);
+    function DiffController(VersionService, usSpinnerService, $timeout) {
         var diff = this;
-        diff.activate = function () {
-            $rootScope.setTitleAndPageProperty('Version Difference', 'diff');
-        };
+        diff.activate = ['$scope', function ($scope) {
+            $scope.setTitleAndPageProperty('Version Difference', 'diff');
+        }];
         var loadingBarName = 'loadingSpin';
         usSpinnerService.spin(loadingBarName);
         VersionService.getSheetNameAndLatestVersion()

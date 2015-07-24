@@ -3,12 +3,12 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', '$rootScope', HistoryController]);
-    function HistoryController(VersionService, usSpinnerService, $rootScope) {
+    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', HistoryController]);
+    function HistoryController(VersionService, usSpinnerService) {
         var history = this;
-        history.activate = function () {
-            $rootScope.setTitleAndPageProperty('Version History', 'history');
-        };
+        history.activate = ['$scope', function ($scope) {
+            $scope.setTitleAndPageProperty('Version History', 'history');
+        }];
         var loadingBarName = 'loadingVersionSpin';
         usSpinnerService.spin(loadingBarName);
         VersionService.getSheetNameAndLatestVersion()

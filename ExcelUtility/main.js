@@ -3,7 +3,7 @@
  */
 (function (ng) {
     var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll']);
-    versionModule.controller('VersionController', ['$router', '$rootScope', function ($router, $rootScope) {
+    versionModule.controller('VersionController', ['$router', '$rootScope', function ($router, $scope) {
         var version = this;
         $router.config([
             {
@@ -27,7 +27,7 @@
                 component: 'history'
             }
         ]);
-        $rootScope.setTitleAndPageProperty = function(title, page) {
+        $scope.setTitleAndPageProperty = function(title, page) {
             version.title = title;
             version.page = page;
         };

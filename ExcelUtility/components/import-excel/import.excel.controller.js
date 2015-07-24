@@ -3,13 +3,13 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('ImportExcelController', ['$timeout', 'VersionService', 'usSpinnerService', '$rootScope', ImportExcelController]);
-    function ImportExcelController($timeout, VersionService, usSpinnerService, $rootScope) {
+    versionModule.controller('ImportExcelController', ['$timeout', 'VersionService', 'usSpinnerService', ImportExcelController]);
+    function ImportExcelController($timeout, VersionService, usSpinnerService) {
         /** drop target **/
         var importExcel = this;
-        importExcel.activate = function () {
-            $rootScope.setTitleAndPageProperty('Excel Import', 'import');
-        };
+        importExcel.activate = ['$scope', function ($scope) {
+            $scope.setTitleAndPageProperty('Excel Import', 'import');
+        }];
         importExcel.showSaveOption = false;
         var element;
         var _workstart = function () {
