@@ -3,7 +3,7 @@
  */
 (function (ng) {
     var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll']);
-    versionModule.controller('VersionController', ['$rootScope', '$router', function ($rootScope, $router) {
+    versionModule.controller('VersionController', ['$router', function ($router) {
         var version = this;
         $router.config([
             {
@@ -11,34 +11,23 @@
                 redirectTo: '/home'
             },
             {
-                page: 'diff',
-                title: 'Version Difference',
                 path: '/diff',
                 component: 'diff'
             },
             {
-                page: 'home',
-                title: 'Home',
                 path: '/home',
                 component: 'home'
             },
             {
-                page: 'import',
-                title: 'Excel Import',
                 path: '/importExcel',
                 component: 'importExcel'
             },
             {
-                page: 'Version Administration',
-                title: 'Version History',
                 path: '/history',
                 component: 'history'
             }
         ]);
-        $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-            version.page = current.$$route.page;
-            version.title = current.$$route.title;
-        });
+        version.a = "asdf";
     }]);
     versionModule.constant("GlobalConstant", {
         API_URL: 'http://104.236.140.70:9000/site'

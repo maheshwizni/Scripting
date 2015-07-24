@@ -3,7 +3,8 @@
  */
 (function (ng, w) {
     var versionModule = ng.module('version');
-    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', function (VersionService, usSpinnerService, $timeout) {
+    versionModule.controller('DiffController', ['VersionService', 'usSpinnerService', '$timeout', DiffController]);
+    function DiffController(VersionService, usSpinnerService, $timeout) {
         var diffController = this;
         var loadingBarName = 'loadingSpin';
         usSpinnerService.spin(loadingBarName);
@@ -69,10 +70,15 @@
         diffController.showMoreDiff = function () {
             usSpinnerService.spin(loadingBarName);
             diffController.showMaxDiffRows += 20;
-            $timeout(function() {
+            $timeout(function () {
                 usSpinnerService.stop(loadingBarName);
             }, 5000);
         };
         diffController.showMaxDiffRows = 0;
-    }]);
+    }
+
+    DiffController.prototype.activate = function () {
+        console.log(111, this, this.a);
+        return true;
+    };
 })(angular, window);

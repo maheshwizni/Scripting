@@ -3,7 +3,8 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', function (VersionService, usSpinnerService) {
+    versionModule.controller('HistoryController', ['VersionService', 'usSpinnerService', HistoryController]);
+    function HistoryController(VersionService, usSpinnerService) {
         var history = this;
         var loadingBarName = 'loadingVersionSpin';
         usSpinnerService.spin(loadingBarName);
@@ -28,5 +29,9 @@
                     history.data = undefined;
                 });
         };
-    }]);
+    }
+
+    HistoryController.prototype.activate = function () {
+        console.log(3333);
+    };
 })(angular);

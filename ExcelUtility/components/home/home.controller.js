@@ -3,6 +3,7 @@
  */
 (function (ng) {
     var versionModule = ng.module('version');
-    versionModule.controller('HomeController', [function () {
-    }]);
+    versionModule.controller('HomeController', [HomeController]);
+    function HomeController() {
+    }
 })(angular);
