@@ -9,6 +9,7 @@
         history.activate = ['$scope', function ($scope) {
             $scope.setTitleAndPageProperty('Version History', 'history');
         }];
+
         var loadingBarName = 'loadingVersionSpin';
         usSpinnerService.spin(loadingBarName);
         VersionService.getSheetNameAndLatestVersion()
