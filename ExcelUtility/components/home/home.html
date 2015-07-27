@@ -1,1 +1,10 @@
-Home Page
+<div class="container" ng-controller="HomeController">
+    <h2>
+        User View
+    </h2>
+    <tabset>
+        <tab heading="Sites" ng-click="loadData('Site')">Sites</tab>
+        <tab heading="Cyber System" ng-click="loadData('CyberSystem')">Cyber System</tab>
+        <tab heading="Cyber Assets" ng-click="loadData('CyberAsset')">Cyber Assets</tab>
+    </tabset>
+</div>

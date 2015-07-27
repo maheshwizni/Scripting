@@ -2,7 +2,7 @@
  * Created by Amit Thakkar on 13/07/15.
  */
 (function (ng) {
-    var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll']);
+    var versionModule = ng.module('version', ['ngNewRouter', 'angularSpinner', 'infinite-scroll', 'ui.bootstrap']);
     versionModule.controller('VersionController', ['$router', '$rootScope', function ($router, $scope) {
         var version = this;
         $router.config([
